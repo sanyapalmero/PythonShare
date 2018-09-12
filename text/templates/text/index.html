@@ -1,1 +1,14 @@
-<textarea></textarea>
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>TextShare</title>
+</head>
+<body>
+    <form action="{% url 'text:add' %}" method="post">
+        {% csrf_token %}
+        <textarea name="textfield"></textarea>
+        <input type="submit" value="Отправить">
+    </form>
+</body>
+</html>
