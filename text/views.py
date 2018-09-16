@@ -1,16 +1,19 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse
 from . import models
-# Create your views here.
+
 
 def index(request):
     return render(request, 'text/index.html')
 
+
 def add(request):
     text_post = request.POST['textfield']
-    text_obj = models.Text(text = text_post)
+    text_obj = models.Text(text=text_post)
     text_obj.save()
-    return redirect('../../text/')
+    return redirect(f'../../text/{text_obj.id}')
 
 
-
+def detail(request, text_id):
+    text = get_object_or_404(models.Text, pk=text_id)
+    return render(request, 'text/detail.html', {'text': text})
