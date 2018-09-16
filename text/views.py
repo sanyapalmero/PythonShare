@@ -11,7 +11,7 @@ def add(request):
     text_post = request.POST['textfield']
     text_obj = models.Text(text=text_post)
     text_obj.save()
-    return redirect(f'../../text/{text_obj.id}')
+    return redirect('text:detail', text_id=text_obj.id)
 
 
 def detail(request, text_id):
