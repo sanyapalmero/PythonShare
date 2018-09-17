@@ -1,11 +1,9 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="utf-8" />
-    <title>TextShare</title>
-</head>
-<body>
-    <p>{{ text.text }}</p>
-    <a href="{% url 'text:index' %}">Создать новый</a>
-</body>
-</html>
+{% extends "text/templates.html" %}
+
+{% block title %} TextShare Detail {% endblock %}
+
+{% block content %}
+<strong>№: </strong><p>{{ text.id }}</p>
+<strong>Текст: </strong><p>{{ text.text }}</p>
+<a href="{% url 'text:index' %}">Создать новый</a>
+{% endblock %}

@@ -1,14 +1,16 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="utf-8" />
-    <title>TextShare</title>
-</head>
-<body>
-    <form action="{% url 'text:add' %}" method="post">
-        {% csrf_token %}
-        <textarea name="textfield"></textarea>
-        <input type="submit" value="Отправить">
-    </form>
-</body>
-</html>
+{% extends "text/templates.html" %}
+
+{% block title %} TextShare Index {% endblock %}
+
+{% block content %}
+<div class="starter-template">
+    <h2>TextShare - сервис хранения текстовых документов</h2>
+    <p class="lead">Добавляйте, просматривайте, редактируйте ваши текстовые документы</p>
+</div>
+<label for="text">Введите текст:</label>
+<form action="{% url 'text:add' %}" method="post">
+    {% csrf_token %}
+    <textarea style="height:200px;" class="form-control" name="textfield" id="text"></textarea>
+    <input class="btn btn-primary" type="submit" value="Добавить">
+</form>
+{% endblock %}
