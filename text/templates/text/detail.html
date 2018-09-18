@@ -4,6 +4,6 @@
 
 {% block content %}
 <strong>№: </strong><p>{{ text.id }}</p>
-<strong>Текст: </strong><p>{{ text.text }}</p>
+<strong>Текст: </strong><p>{{ text.text|linebreaks }}</p>
 <a href="{% url 'text:index' %}">Создать новый</a>
 {% endblock %}
