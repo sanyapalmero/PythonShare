@@ -15,5 +15,5 @@ def add(request):
 
 
 def detail(request, text_id):
-    text = get_object_or_404(models.Text, pk=text_id)
+    text = get_object_or_404(models.Text, id=text_id)
     return render(request, 'text/detail.html', {'text': text})
