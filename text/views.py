@@ -4,7 +4,8 @@ from . import models
 
 
 def index(request):
-    return render(request, 'text/index.html')
+    texts = models.Text.objects.all()
+    return render(request, 'text/index.html',{'texts': texts})
 
 
 def add(request):
