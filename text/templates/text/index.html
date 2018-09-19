@@ -11,6 +11,32 @@
 <form action="{% url 'text:add' %}" method="post">
     {% csrf_token %}
     <textarea style="height:200px;" class="form-control" name="textfield" id="text"></textarea>
+    {% if request.user.is_authenticated %}
     <input class="btn btn-primary" type="submit" value="Добавить">
+    {% else %}
+    <p class="text-danger">Авторизуйтесь, чтобы добавлять тексты</p>
+    {% endif %}
 </form>
+<table class="table">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Текст</th>
+            <th>Автор</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for text in texts %}
+            <tr>
+                <td>{{ text.id }}</td>
+                <td>{{ text.text|truncatewords:10 }}</td>
+                {% if text.user == None %}
+                <td>Неизвестен</td>
+                {% else %}
+                <td>{{ text.user }}</td>
+                {% endif %}
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
 {% endblock %}
