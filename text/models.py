@@ -13,7 +13,14 @@ class Text(models.Model):
     def short_text(self):
         return truncatewords(self.text, 4)
 
+    @property
+    def get_user(self):
+        if self.user != None:
+            return (self.user.username)
+        else:
+            return ("Unknown")
+
 
 @admin.register(Text)
 class TextAdmin(admin.ModelAdmin):
-    list_display = ('id', 'short_text')
+    list_display = ('id', 'short_text', 'get_user')
