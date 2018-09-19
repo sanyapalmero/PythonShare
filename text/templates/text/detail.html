@@ -6,5 +6,7 @@
 <strong>№: </strong><p>{{ text.id }}</p>
 <strong>Текст: </strong><p>{{ text.text|linebreaks }}</p>
 <a href="{% url 'text:index' %}">Создать новый</a>
-<a href="{% url 'text:edit' text.id %}">Изменить</a>
+    {% if text.user_id == request.user.id %}
+        <a href="{% url 'text:edit' text.id %}">Изменить</a>
+    {% endif %}
 {% endblock %}
