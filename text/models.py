@@ -19,8 +19,3 @@ class Text(models.Model):
             return (self.user.username)
         else:
             return ("Unknown")
-
-
-@admin.register(Text)
-class TextAdmin(admin.ModelAdmin):
-    list_display = ('id', 'short_text', 'get_user')
