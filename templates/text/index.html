@@ -29,7 +29,9 @@
         {% for text in texts %}
             <tr>
                 <td>{{ text.id }}</td>
-                <td>{{ text.text|truncatewords:10 }}</td>
+                <td>
+                    <a href="{% url 'text:detail' text.id %}">{{ text.text|truncatewords:3 }}</a>
+                </td>
                 {% if text.user == None %}
                 <td>Неизвестен</td>
                 {% else %}
