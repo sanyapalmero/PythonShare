@@ -1,11 +1,11 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseForbidden
 from . import models
 
 
 def index(request):
     texts = models.Text.objects.all()
-    return render(request, 'text/index.html',{'texts': texts})
+    return render(request, 'text/index.html', {'texts': texts})
 
 
 def add(request):
@@ -22,11 +22,17 @@ def detail(request, text_id):
 
 def upd(request, text_id):
     text = get_object_or_404(models.Text, id=text_id)
-    text.text = request.POST['textfield']
-    text.save()
-    return redirect('text:detail', text_id=text.id)
+    try:
+        text.text = request.POST['textfield']
+        text.save()
+        return redirect('text:detail', text_id=text.id)
+    except KeyError:
+        return HttpResponseForbidden()
 
 
 def edit(request, text_id):
-    text = get_object_or_404(models.Text, id=text_id)
-    return render(request, 'text/edit.html', {'text': text})
+    if request.user.is_authenticated:
+        text = get_object_or_404(models.Text, id=text_id)
+        return render(request, 'text/edit.html', {'text': text})
+    else:
+        return HttpResponseForbidden()
