@@ -41,4 +41,9 @@
         {% endfor %}
     </tbody>
 </table>
+<ul class="pagination">
+    {% for i in texts.paginator.page_range %}
+        <li {% if texts.number == i %}class="active"{% endif %}><a href="?page={{ i }}">{{ i }}</a></li>
+    {% endfor %}
+</ul>
 {% endblock %}
