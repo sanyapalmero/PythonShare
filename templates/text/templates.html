@@ -19,7 +19,7 @@
                 <ul class="nav navbar-nav">
                     {% if request.user.is_authenticated %}
                         <li><a href="{% url 'text:index' %}">Index</a></li>
-                        <li><a href="#">View</a></li>
+                        <li><a href="{% url 'admin:logout' %}">Выйти</a></li>
                     {% else %}
                         <li><a href="{% url 'admin:login' %}">Войти</a></li>
                     {% endif %}
