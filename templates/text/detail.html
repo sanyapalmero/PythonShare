@@ -9,6 +9,7 @@
 <a href="{% url 'text:index' %}">Создать новый</a>
     {% if text.user_id == request.user.id %}
         <a href="{% url 'text:edit' text.id %}">Изменить</a>
+        <a href="{% url 'text:delete' text.id %}">Удалить</a>
     {% endif %}
 {% else %}
 <p class="text-danger">Авторизуйтесь, чтобы добавлять/изменять тексты</p>
