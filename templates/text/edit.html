@@ -6,7 +6,7 @@
 <label for="text">Изменить текст:</label>
 <form action="{% url 'text:upd' text.id %}" method="post">
     {% csrf_token %}
-    <textarea style="height:200px;" class="form-control" name="textfield" id="text">{{ text.text }}</textarea>
+    <textarea style="height:200px;" class="form-control" name="textfield" id="text" required>{{ text.text }}</textarea>
     <input class="btn btn-primary" type="submit" value="Изменить">
 </form>
 {% endblock %}
