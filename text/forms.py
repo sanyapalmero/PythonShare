@@ -7,5 +7,5 @@ class TextForm(forms.Form):
             'class': 'form-control',
             'style': 'height:200px'
         }),
-        label="Добавьте текст",
+        label="Создание текстового документа",
         max_length=100)

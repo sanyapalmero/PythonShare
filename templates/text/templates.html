@@ -18,7 +18,13 @@
             <div class="collapse navbar-collapse">
                 <ul class="nav navbar-nav">
                     {% if request.user.is_authenticated %}
-                        <li><a href="{% url 'text:index' %}">Index</a></li>
+                        <li><a href="{% url 'text:index' %}">Главная</a></li>
+                        <li><a href="{% url 'text:create' %}">Создать</a></li>
+                    {% endif %}
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    {% if request.user.is_authenticated %}
+                        <li><p class="navbar-text">Добро пожаловать, {{ request.user }}</p></li>
                         <li><a href="{% url 'admin:logout' %}">Выйти</a></li>
                     {% else %}
                         <li><a href="{% url 'admin:login' %}">Войти</a></li>

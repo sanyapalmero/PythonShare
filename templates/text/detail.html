@@ -3,12 +3,12 @@
 {% block title %} TextShare Detail {% endblock %}
 
 {% block content %}
-<strong>№: </strong><p>{{ text.id }}</p>
-<strong>Текст: </strong><p>{{ text.text|linebreaks }}</p>
+<strong>ID: {{ text.id }}</strong><br>
+<strong>Текст: </strong>{{ text.text|linebreaks }}
 {% if request.user.is_authenticated %}
-<a href="{% url 'text:index' %}">Создать новый</a>
+<a href="{% url 'text:create' %}">Создать новый</a> |
     {% if text.user_id == request.user.id %}
-        <a href="{% url 'text:edit' text.id %}">Изменить</a>
+        <a href="{% url 'text:edit' text.id %}">Изменить</a> |
         <a href="{% url 'text:delete' text.id %}">Удалить</a>
     {% endif %}
 {% else %}
