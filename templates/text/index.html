@@ -7,15 +7,7 @@
     <h2>TextShare - сервис хранения текстовых документов</h2>
     <p class="lead">Добавляйте, просматривайте, редактируйте ваши текстовые документы</p>
 </div>
-<form action="{% url 'text:add' %}" method="post">
-    {% csrf_token %}
-    {{ form }}
-    {% if request.user.is_authenticated %}
-    <input class="btn btn-primary" type="submit" value="Добавить">
-    {% else %}
-    <p class="text-danger">Авторизуйтесь, чтобы добавлять тексты</p>
-    {% endif %}
-</form>
+<p>Список текстовых документов</p>
 <table class="table">
     <thead>
         <tr>
