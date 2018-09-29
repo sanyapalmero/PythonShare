@@ -7,10 +7,9 @@
     <h2>TextShare - сервис хранения текстовых документов</h2>
     <p class="lead">Добавляйте, просматривайте, редактируйте ваши текстовые документы</p>
 </div>
-<label for="text">Введите текст:</label>
 <form action="{% url 'text:add' %}" method="post">
     {% csrf_token %}
-    <textarea style="height:200px;" class="form-control" name="textfield" id="text"></textarea>
+    {{ form }}
     {% if request.user.is_authenticated %}
     <input class="btn btn-primary" type="submit" value="Добавить">
     {% else %}
