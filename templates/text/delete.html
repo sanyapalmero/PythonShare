@@ -1,0 +1,16 @@
+{% extends "text/templates.html" %}
+
+{% block title %} TextShare Delete {% endblock %}
+
+{% block content %}
+<label for="text">Удалить текст:</label>
+<form action="{% url 'text:del' text.id %}" method="post">
+    {% csrf_token %}
+    {{ text.text }}
+    {% if request.user.is_authenticated %}
+        <input class="btn btn-danger" type="submit" value="Удалить">
+    {% else %}
+        <p class="text-danger">Авторизуйтесь, чтобы удалить текст!</p>
+    {% endif %}
+</form>
+{% endblock %}

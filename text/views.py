@@ -4,8 +4,10 @@ from django.views.generic import TemplateView
 from django.views import View
 from . import models
 from django.core.paginator import Paginator
+from . import forms
 
 ENTRIES_COUNT = 20
+
 
 class IndexView(View):
     def get(self, request):
@@ -13,7 +15,11 @@ class IndexView(View):
         paginator = Paginator(texts_list, ENTRIES_COUNT)
         page = request.GET.get('page')
         texts = paginator.get_page(page)
-        return render(request, 'text/index.html', {'texts': texts})
+        form = forms.TextForm()
+        return render(request, 'text/index.html', {
+            'texts': texts,
+            'form': form
+        })
 
 
 class DetailView(TemplateView):
@@ -28,9 +34,34 @@ class EditView(View):
     def get(self, request, text_id):
         text = get_object_or_404(models.Text, id=text_id)
         if request.user == text.user:
-            return render(request, 'text/edit.html', {'text': text})
+            form = forms.TextForm()
+            return render(request, 'text/edit.html', {
+                'text': text,
+                'form': form
+            })
         else:
             return HttpResponseForbidden()
+
+
+class DeleteView(TemplateView):
+    template_name = 'text/delete.html'
+
+    def get_context_data(self, text_id):
+        text = get_object_or_404(models.Text, id=text_id)
+        return {'text': text}
+
+
+class DelView(View):
+    def post(self, request, text_id):
+        text = get_object_or_404(models.Text, id=text_id)
+        if request.user == text.user:
+            text.delete()
+            return redirect('text:index')
+        else:
+            return HttpResponseForbidden()
+
+    def get(self, request, text_id):
+        return HttpResponseForbidden()
 
 
 class AddView(View):
