@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from django.http import HttpResponse, HttpResponseForbidden
+from django.http import HttpResponseForbidden, HttpResponseRedirect
 from django.views.generic import TemplateView
 from django.views import View
 from . import models
@@ -7,7 +7,6 @@ from django.core.paginator import Paginator
 from . import forms
 
 ENTRIES_COUNT = 20
-RETURN_URL = {}
 
 class IndexView(View):
     def get(self, request):
@@ -15,11 +14,6 @@ class IndexView(View):
         paginator = Paginator(texts_list, ENTRIES_COUNT)
         page = request.GET.get('page')
         texts = paginator.get_page(page)
-        if page == None:
-            return_url = '?page=1'
-        else:
-            return_url = f'?page={page}'
-        RETURN_URL["url"] = return_url
         return render(request, 'text/index.html', {
             'texts': texts,
         })
@@ -34,7 +28,8 @@ class DetailView(TemplateView):
 
     def get_context_data(self, text_id):
         text = get_object_or_404(models.Text, id=text_id)
-        return {'text': text}
+        return_url = self.request.GET.get('next')
+        return {'text': text, 'url': return_url}
 
 
 class EditView(View):
@@ -55,7 +50,8 @@ class DeleteView(TemplateView):
 
     def get_context_data(self, text_id):
         text = get_object_or_404(models.Text, id=text_id)
-        return {'text': text}
+        return_url = self.request.GET.get('next')
+        return {'text': text, 'url': return_url}
 
 
 class DelView(View):
@@ -63,8 +59,8 @@ class DelView(View):
         text = get_object_or_404(models.Text, id=text_id)
         if request.user == text.user:
             text.delete()
-            return_url = RETURN_URL["url"]
-            return redirect (f'/{return_url}')
+            return_url = request.GET.get('next')
+            return HttpResponseRedirect (return_url)
         else:
             return HttpResponseForbidden()
 
