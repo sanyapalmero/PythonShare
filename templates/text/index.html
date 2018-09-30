@@ -14,6 +14,7 @@
             <th>ID</th>
             <th>Текст</th>
             <th>Автор</th>
+            <th>Дата создания</th>
         </tr>
     </thead>
     <tbody>
@@ -27,6 +28,7 @@
                 <td>Неизвестен</td>
                 {% else %}
                 <td>{{ text.user }}</td>
+                <td>{{ text.date }}</td>
                 {% endif %}
             </tr>
         {% endfor %}
