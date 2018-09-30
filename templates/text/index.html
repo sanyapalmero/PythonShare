@@ -21,7 +21,7 @@
             <tr>
                 <td>{{ text.id }}</td>
                 <td>
-                    <a href="{% url 'text:detail' text.id %}?next=/?page={{ texts.number }}">{{ text.text|truncatewords:3 }}</a>
+                    <a href="{% url 'text:detail' text.id %}?next={{ request.get_full_path|urlencode }}">{{ text.text|truncatewords:3 }}</a>
                 </td>
                 {% if text.user == None %}
                 <td>Неизвестен</td>

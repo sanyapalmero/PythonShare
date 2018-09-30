@@ -4,11 +4,12 @@
 
 {% block content %}
 <label for="text">Удалить текст:</label>
-<form action="{% url 'text:del' text.id %}?next={{ url }}" method="post">
+<form action="{% url 'text:del' text.id %}" method="post">
     {% csrf_token %}
     {{ text.text }}
     {% if request.user.is_authenticated %}
         <input class="btn btn-danger" type="submit" value="Удалить">
+        <input type="hidden" name="next" value="{{ url }}">
     {% else %}
         <p class="text-danger">Авторизуйтесь, чтобы удалить текст!</p>
     {% endif %}

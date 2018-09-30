@@ -16,6 +16,7 @@ class IndexView(View):
         texts = paginator.get_page(page)
         return render(request, 'text/index.html', {
             'texts': texts,
+            'request': request
         })
 
 class CreateView(View):
@@ -59,7 +60,7 @@ class DelView(View):
         text = get_object_or_404(models.Text, id=text_id)
         if request.user == text.user:
             text.delete()
-            return_url = request.GET.get('next')
+            return_url = request.POST['next']
             return HttpResponseRedirect (return_url)
         else:
             return HttpResponseForbidden()
