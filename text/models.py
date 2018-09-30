@@ -2,14 +2,14 @@ from django.db import models
 from django.contrib import admin
 from django.contrib.auth.models import User
 from django.template.defaultfilters import truncatewords
-from datetime import datetime
+from django.utils import timezone
 
 
 class Text(models.Model):
     text = models.CharField(max_length=100)
     user = models.ForeignKey(
         User, null=True, blank=True, on_delete=models.CASCADE)
-    date = models.DateTimeField(default=datetime.now, blank=True)
+    date = models.DateTimeField(default=timezone.now, blank=True)
 
     @property
     def short_text(self):
