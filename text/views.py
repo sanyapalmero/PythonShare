@@ -8,6 +8,7 @@ from . import forms
 
 ENTRIES_COUNT = 20
 
+
 class IndexView(View):
     def get(self, request):
         texts_list = models.Text.objects.all()
@@ -19,10 +20,12 @@ class IndexView(View):
             'request': request
         })
 
+
 class CreateView(View):
     def get(self, request):
         form = forms.TextForm()
         return render(request, 'text/create.html', {'form': form})
+
 
 class DetailView(TemplateView):
     template_name = 'text/detail.html'
@@ -52,6 +55,8 @@ class DeleteView(TemplateView):
     def get_context_data(self, text_id):
         text = get_object_or_404(models.Text, id=text_id)
         return_url = self.request.GET.get('next')
+        if return_url == None:
+            return_url = "/"
         return {'text': text, 'url': return_url}
 
 
@@ -59,9 +64,11 @@ class DelView(View):
     def post(self, request, text_id):
         text = get_object_or_404(models.Text, id=text_id)
         if request.user == text.user:
-            text.delete()
             return_url = request.POST['next']
-            return HttpResponseRedirect (return_url)
+            if return_url == 'None':
+                return_url = "/"
+            text.delete()
+            return HttpResponseRedirect(return_url)
         else:
             return HttpResponseForbidden()
 
