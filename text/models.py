@@ -1,8 +1,8 @@
 from django.db import models
 from django.contrib import admin
-from django.contrib.auth.models import User
 from django.template.defaultfilters import truncatewords
 from django.utils import timezone
+from user.models import User
 
 
 class Text(models.Model):
