@@ -10,7 +10,7 @@
     <script src="{% static "/bootstrap/js/bootstrap.min.js" %}"></script>
 </head>
 <body>
-    <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+    <div style="border:none"  class="navbar navbar-default navbar-fixed-top" role="navigation">
         <div class="container">
             <div class="navbar-header">
                 <a class="navbar-brand" href="{% url 'text:index' %}">TextShare</a>
@@ -28,6 +28,7 @@
                         <li><a href="{% url 'admin:logout' %}">Выйти</a></li>
                     {% else %}
                         <li><a href="{% url 'admin:login' %}">Войти</a></li>
+                        <li><a href="{% url 'user:create' %}">Регистрация</a></li>
                     {% endif %}
                 </ul>
             </div>
