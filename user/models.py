@@ -4,26 +4,25 @@ from django.db import models
 
 #Custom user model
 
+
 class UserManager(BaseUserManager):
     def create_user(self, username, password, **kwargs):
-        user = self.model(username = username,**kwargs)
+        user = self.model(username=username, **kwargs)
         user.set_password(password)
-        user.save(using = self._db)
+        user.save(using=self._db)
         return user
 
     def create_superuser(self, username, password):
-        user = self.model(
-            username = username,
-            role = User.ROLE_ADMIN
-            )
+        user = self.model(username=username, role=User.ROLE_ADMIN)
         user.set_password(password)
-        user.save(using = self._db)
+        user.save(using=self._db)
         return user
+
 
 class User(AbstractBaseUser):
     objects = UserManager()
     USERNAME_FIELD = 'username'
-    REQUIRED_FIELDS = ['password']
+    #REQUIRED_FIELDS = ['password']
 
     ROLE_USER = 'user'
     ROLE_ADMIN = 'admin'
@@ -35,7 +34,8 @@ class User(AbstractBaseUser):
 
     username = models.CharField(max_length=20, unique=True)
     created_at = models.DateTimeField(default=timezone.now)
-    role = models.CharField(max_length=64,choices=ROLE_CHOICES, default=ROLE_USER)
+    role = models.CharField(
+        max_length=64, choices=ROLE_CHOICES, default=ROLE_USER)
 
     @property
     def is_superuser(self):

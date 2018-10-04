@@ -1,0 +1,18 @@
+{% extends "templates.html" %}
+
+{% block title %} Registration {% endblock %}
+
+{% block content %}
+<form action="{% url 'user:add' %}" method="post">
+    {% csrf_token %}
+    {{ form }}
+    <br>
+    <input class="btn btn-primary" type="submit" value="Зарегистрироваться">
+    {% if error %}
+        <p style="color:red">{{ error }}</p>
+    {% endif %}
+    {% if good %}
+        <p style="color:green">{{ good }}</p>
+    {% endif %}
+</form>
+{% endblock %}
