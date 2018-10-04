@@ -28,7 +28,7 @@ class AddView(View):
                 })
             except:
                 user = models.User.objects.create_user(username, password)
-                good = "Вы успешно зарегестрированы!"
+                good = "Вы успешно зарегистрированы!"
                 return render(request, 'user/register.html', {
                     'form': form,
                     'good': good
