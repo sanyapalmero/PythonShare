@@ -1,0 +1,23 @@
+{% extends "templates.html" %}
+
+{% block content %}
+    <h3>Авторизация</h3>
+    <form action="{% url 'user:login' %}" method="post">
+        {% csrf_token %}
+        <div class="form-group">
+            <label>Имя пользователя</label>
+            <input style="width:250px;" type="text" class="form-control" name="username">
+        </div>
+        <div class="form-group">
+            <label>Пароль</label>
+            <input style="width:250px;" type="password" class="form-control" name="password">
+        </div>
+        <input class="btn btn-primary" type="submit" value="Войти">
+    </form>
+    {% if good %}
+        <p style="color:green">{{ good }}</p>
+    {% endif %}
+    {% if bad %}
+        <p style="color:red">{{ bad }}</p>
+    {% endif %}
+{% endblock %}

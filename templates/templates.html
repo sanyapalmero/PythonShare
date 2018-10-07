@@ -25,9 +25,9 @@
                 <ul class="nav navbar-nav navbar-right">
                     {% if request.user.is_authenticated %}
                         <li><p class="navbar-text">Добро пожаловать, {{ request.user }}</p></li>
-                        <li><a href="{% url 'admin:logout' %}">Выйти</a></li>
+                        <li><a href="{% url 'user:logout' %}">Выйти</a></li>
                     {% else %}
-                        <li><a href="{% url 'admin:login' %}">Войти</a></li>
+                        <li><a href="{% url 'user:login' %}">Войти</a></li>
                         <li><a href="{% url 'user:create' %}">Регистрация</a></li>
                     {% endif %}
                 </ul>

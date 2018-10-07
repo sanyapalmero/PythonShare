@@ -3,16 +3,17 @@ from django.views import View
 from . import forms
 from django.http import HttpResponse
 from . import models
+from django.contrib.auth import authenticate, login, logout
 
 
 # Create your views here.
 class CreateView(View):
     def get(self, request):
-        form = forms.UserForm()
+        form = forms.CreateUserForm()
         return render(request, 'user/register.html', {'form': form})
 
     def post(self, request):
-        form = forms.UserForm(request.POST)
+        form = forms.CreateUserForm(request.POST)
         if form.is_valid():
             username = form.cleaned_data['username']
             password = form.cleaned_data['password']
@@ -25,3 +26,30 @@ class CreateView(View):
             })
         else:
             return render(request, 'user/register.html', {'form': form})
+
+
+class LoginView(View):
+    def get(self, request):
+        form = forms.LoginUserForm()
+        return render(request, 'user/login.html', {'form': form})
+
+    def post(self, request):
+        form = forms.LoginUserForm()
+        username = request.POST['username']
+        password = request.POST['password']
+        user = authenticate(request, username=username, password=password)
+        if user is not None:
+            login(request, user)
+            return redirect('text:index')
+        else:
+            bad = 'Неверное имя пользователя или пароль'
+            return render(request, 'user/login.html', {
+                'form': form,
+                'bad': bad
+            })
+
+
+class LogOutView(View):
+    def get(self, request):
+        logout(request)
+        return redirect('text:index')

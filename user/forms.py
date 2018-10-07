@@ -2,7 +2,7 @@ from django import forms
 from . import models
 
 
-class UserForm(forms.Form):
+class CreateUserForm(forms.Form):
     username = forms.CharField(label="Имя пользователя", max_length=20)
     password = forms.CharField(label="Пароль", max_length=128)
     repeat_password = forms.CharField(label="Повторите пароль", max_length=128)
@@ -26,3 +26,8 @@ class UserForm(forms.Form):
             self.add_error('repeat_password', error)
         else:
             return cleaned_data
+
+
+class LoginUserForm(forms.Form):
+    username = forms.CharField(label="Ваше имя", max_length=20)
+    password = forms.CharField(label="Пароль", max_length=128)
