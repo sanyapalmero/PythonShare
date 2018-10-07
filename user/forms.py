@@ -1,27 +1,28 @@
 from django import forms
+from . import models
 
 
 class UserForm(forms.Form):
-    username = forms.CharField(
-        label="Имя пользователя",
-        max_length=20,
-        widget=forms.TextInput(attrs={
-            'class': 'form-control',
-            'style': 'width:250px'
-        }))
-    password = forms.CharField(
-        label="Пароль",
-        max_length=128,
-        widget=forms.TextInput(attrs={
-            'class': 'form-control',
-            'style': 'width:250px',
-            'type': 'password'
-        }))
-    repit_password = forms.CharField(
-        label="Повторите пароль",
-        max_length=128,
-        widget=forms.TextInput(attrs={
-            'class': 'form-control',
-            'style': 'width:250px',
-            'type': 'password'
-        }))
+    username = forms.CharField(label="Имя пользователя", max_length=20)
+    password = forms.CharField(label="Пароль", max_length=128)
+    repeat_password = forms.CharField(label="Повторите пароль", max_length=128)
+
+    def clean_username(self):
+        username = self.cleaned_data['username']
+        try:
+            user = models.User.objects.get(username=username)
+            error = 'Пользователь с таким именем уже существует!'
+            self.add_error('username', error)
+        except:
+            return username
+
+    def clean(self):
+        cleaned_data = super().clean()
+        password = self.cleaned_data['password']
+        repeat_password = self.cleaned_data['repeat_password']
+        if password != repeat_password:
+            error = 'Пароли не совпадают!'
+            self.add_error('password', error)
+            self.add_error('repeat_password', error)
+        else:
+            return cleaned_data
