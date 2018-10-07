@@ -13,7 +13,7 @@ class UserForm(forms.Form):
             user = models.User.objects.get(username=username)
             error = 'Пользователь с таким именем уже существует!'
             self.add_error('username', error)
-        except:
+        except models.User.DoesNotExist:
             return username
 
     def clean(self):
