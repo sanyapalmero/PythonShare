@@ -11,33 +11,17 @@ class CreateView(View):
         form = forms.UserForm()
         return render(request, 'user/register.html', {'form': form})
 
-
-class AddView(View):
     def post(self, request):
-        form = forms.UserForm()
+        form = forms.UserForm(request.POST)
         username = request.POST['username']
         password = request.POST['password']
-        repit_password = request.POST['repit_password']
-        if password == repit_password:
-            try:
-                user = get_object_or_404(models.User, username=username)
-                error = "Пользователь с этим именем уже существует!"
-                return render(request, 'user/register.html', {
-                    'form': form,
-                    'error': error
-                })
-            except:
-                user = models.User.objects.create_user(username, password)
-                good = "Вы успешно зарегистрированы!"
-                return render(request, 'user/register.html', {
-                    'form': form,
-                    'good': good
-                })
-        else:
-            error = "Пароли не совпадают!"
+        repeat_password = request.POST['repeat_password']
+        if form.is_valid():
+            user = models.User.objects.create_user(username, password)
+            good = 'Вы успешно зарегистрированы!'
             return render(request, 'user/register.html', {
                 'form': form,
-                'error': error
+                'good': good
             })
-        #redirect to main page
-        return HttpResponse('nice')
+        else:
+            return render(request, 'user/register.html', {'form': form})
