@@ -7,36 +7,32 @@
     <h2>TextShare - сервис хранения текстовых документов</h2>
     <p class="lead">Добавляйте, просматривайте, редактируйте ваши текстовые документы</p>
 </div>
-<p>Список текстовых документов</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>ID</th>
-            <th>Текст</th>
-            <th>Автор</th>
-            <th>Дата создания</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for text in texts %}
+{% if request.user.is_authenticated %}
+    <p>Список ваших текстовых документов</p>
+    <table class="table">
+        <thead>
             <tr>
-                <td>{{ text.id }}</td>
-                <td>
-                    <a href="{% url 'text:detail' text.id %}?next={{ request.get_full_path|urlencode }}">{{ text.text|truncatewords:3 }}</a>
-                </td>
-                {% if text.user == None %}
-                <td>Неизвестен</td>
-                {% else %}
-                <td>{{ text.user }}</td>
-                <td>{{ text.date }}</td>
-                {% endif %}
+                <th>Текст</th>
+                <th>Дата создания</th>
             </tr>
+        </thead>
+        <tbody>
+            {% for text in texts %}
+                <tr>
+                    <td>
+                        <a href="{% url 'text:detail' text.id %}?next={{ request.get_full_path|urlencode }}">{{ text.text|truncatewords:3 }}</a>
+                    </td>
+                    <td>{{ text.date }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <ul class="pagination">
+        {% for i in texts.paginator.page_range %}
+            <li {% if texts.number == i %}class="active"{% endif %}><a href="?page={{ i }}">{{ i }}</a></li>
         {% endfor %}
-    </tbody>
-</table>
-<ul class="pagination">
-    {% for i in texts.paginator.page_range %}
-        <li {% if texts.number == i %}class="active"{% endif %}><a href="?page={{ i }}">{{ i }}</a></li>
-    {% endfor %}
-</ul>
+    </ul>
+{% else %}
+    <p style="color:red">Авторизуйтесь, чтобы просматривать тексты</p>
+{% endif %}
 {% endblock %}

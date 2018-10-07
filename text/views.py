@@ -11,14 +11,23 @@ ENTRIES_COUNT = 20
 
 class IndexView(View):
     def get(self, request):
-        texts_list = models.Text.objects.all()
-        paginator = Paginator(texts_list, ENTRIES_COUNT)
-        page = request.GET.get('page')
-        texts = paginator.get_page(page)
-        return render(request, 'text/index.html', {
-            'texts': texts,
-            'request': request
-        })
+        #texts_list = models.Text.objects.all()
+        try:
+            texts_list = models.Text.objects.filter(user=request.user)
+            paginator = Paginator(texts_list, ENTRIES_COUNT)
+            page = request.GET.get('page')
+            texts = paginator.get_page(page)
+            return render(request, 'text/index.html', {
+                'texts': texts,
+                'request': request
+            })
+        except TypeError:
+            texts = None
+            return render(request, 'text/index.html', {
+                'texts': texts,
+                'request': request
+            })
+
 
 
 class CreateView(View):
