@@ -15,15 +15,14 @@ class IndexView(View):
             return render(request, 'text/index.html', {
                 'request': request
             })
-        else:
-            texts_list = models.Text.objects.filter(user=request.user)
-            paginator = Paginator(texts_list, ENTRIES_COUNT)
-            page = request.GET.get('page')
-            texts = paginator.get_page(page)
-            return render(request, 'text/index.html', {
-                'texts': texts,
-                'request': request
-            })
+        texts_list = models.Text.objects.filter(user=request.user)
+        paginator = Paginator(texts_list, ENTRIES_COUNT)
+        page = request.GET.get('page')
+        texts = paginator.get_page(page)
+        return render(request, 'text/index.html', {
+            'texts': texts,
+            'request': request
+        })
 
 
 
