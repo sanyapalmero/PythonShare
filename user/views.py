@@ -30,11 +30,9 @@ class CreateView(View):
 
 class LoginView(View):
     def get(self, request):
-        form = forms.LoginUserForm()
-        return render(request, 'user/login.html', {'form': form})
+        return render(request, 'user/login.html')
 
     def post(self, request):
-        form = forms.LoginUserForm()
         username = request.POST['username']
         password = request.POST['password']
         user = authenticate(request, username=username, password=password)
@@ -43,10 +41,7 @@ class LoginView(View):
             return redirect('text:index')
         else:
             bad = 'Неверное имя пользователя или пароль'
-            return render(request, 'user/login.html', {
-                'form': form,
-                'bad': bad
-            })
+            return render(request, 'user/login.html', {'bad': bad})
 
 
 class LogOutView(View):
