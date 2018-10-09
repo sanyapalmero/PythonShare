@@ -3,13 +3,32 @@
 {% block title %} TextShare Create {% endblock %}
 
 {% block content %}
+    <style type="text/css" media="screen">
+        #editor {
+            height: 500px;/*высота редактора*/
+        }
+    </style>
+    <pre id="editor"></pre>
     <form action="{% url 'text:add' %}" method="post">
         {% csrf_token %}
-        {{ form }}
+        <div class="ace-editor editor-control"></div>
+        <input type="hidden" name="textfield" id="textfield" value="">
         {% if request.user.is_authenticated %}
         <input class="btn btn-primary" type="submit" value="Добавить">
         {% else %}
         <p class="text-danger">Авторизуйтесь, чтобы добавлять тексты</p>
         {% endif %}
     </form>
+    <script>
+        var editor = ace.edit("editor");
+        editor.session.setMode("ace/mode/python");
+        function getcode(){
+            var editor = ace.edit("editor");
+            code = editor.getValue();
+            return code
+        }
+        editor.session.on('change', function(delta) {
+            $("#textfield").val(getcode());
+        });
+    </script>
 {% endblock %}
