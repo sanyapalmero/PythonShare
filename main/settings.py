@@ -126,3 +126,5 @@ STATICFILES_DIRS = [
     '/var/www/static/',
 ]
 AUTH_USER_MODEL = 'user.User'
+
+LOGIN_URL = '/user/login/'

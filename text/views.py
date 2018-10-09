@@ -5,16 +5,15 @@ from django.views import View
 from . import models
 from django.core.paginator import Paginator
 from . import forms
+from django.contrib.auth.decorators import login_required
+from django.utils.decorators import method_decorator
 
 ENTRIES_COUNT = 20
 
 
 class IndexView(View):
+    @method_decorator(login_required)
     def get(self, request):
-        if not request.user.is_authenticated:
-            return render(request, 'text/index.html', {
-                'request': request
-            })
         texts_list = models.Text.objects.filter(user=request.user)
         paginator = Paginator(texts_list, ENTRIES_COUNT)
         page = request.GET.get('page')

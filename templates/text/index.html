@@ -7,32 +7,28 @@
     <h2>PythonShare - сервис хранения листингов кода на Python</h2>
     <p class="lead">Делитесь вашим кодом с друзьями</p>
 </div>
-{% if request.user.is_authenticated %}
-    <p style="text-align:center; font-weight:bold">Ваш код</p>
-    <table class="table">
-        <thead>
+<p style="text-align:center; font-weight:bold">Ваш код</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Код</th>
+            <th>Дата создания</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for text in texts %}
             <tr>
-                <th>Код</th>
-                <th>Дата создания</th>
+                <td>
+                    <a href="{% url 'text:detail' text.id %}?next={{ request.get_full_path|urlencode }}">{{ text.text|truncatewords:3 }}</a>
+                </td>
+                <td>{{ text.date }}</td>
             </tr>
-        </thead>
-        <tbody>
-            {% for text in texts %}
-                <tr>
-                    <td>
-                        <a href="{% url 'text:detail' text.id %}?next={{ request.get_full_path|urlencode }}">{{ text.text|truncatewords:3 }}</a>
-                    </td>
-                    <td>{{ text.date }}</td>
-                </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-    <ul class="pagination">
-        {% for i in texts.paginator.page_range %}
-            <li {% if texts.number == i %}class="active"{% endif %}><a href="?page={{ i }}">{{ i }}</a></li>
         {% endfor %}
-    </ul>
-{% else %}
-    <p style="color:red">Авторизуйтесь, чтобы просматривать тексты</p>
-{% endif %}
+    </tbody>
+</table>
+<ul class="pagination">
+    {% for i in texts.paginator.page_range %}
+        <li {% if texts.number == i %}class="active"{% endif %}><a href="?page={{ i }}">{{ i }}</a></li>
+    {% endfor %}
+</ul>
 {% endblock %}
