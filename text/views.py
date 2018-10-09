@@ -90,7 +90,7 @@ class AddView(View):
 
 
 class UpdView(View):
-    def get(self, request, text_id):
+    def post(self, request, text_id):
         text = get_object_or_404(models.Text, id=text_id)
         if request.user == text.user:
             text.text = request.POST['textfield']
