@@ -1,18 +1,18 @@
 {% extends "templates.html" %}
 
-{% block title %} TextShare Index {% endblock %}
+{% block title %} PythonShare {% endblock %}
 
 {% block content %}
-<div class="starter-template">
-    <h2>TextShare - сервис хранения текстовых документов</h2>
-    <p class="lead">Добавляйте, просматривайте, редактируйте ваши текстовые документы</p>
+<div style="text-align:center" class="starter-template">
+    <h2>PythonShare - сервис хранения листингов кода на Python</h2>
+    <p class="lead">Делитесь вашим кодом с друзьями</p>
 </div>
 {% if request.user.is_authenticated %}
-    <p>Список ваших текстовых документов</p>
+    <p style="text-align:center; font-weight:bold">Ваш код</p>
     <table class="table">
         <thead>
             <tr>
-                <th>Текст</th>
+                <th>Код</th>
                 <th>Дата создания</th>
             </tr>
         </thead>
