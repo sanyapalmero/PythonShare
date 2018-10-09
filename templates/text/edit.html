@@ -3,10 +3,32 @@
 {% block title %} TextShare Detail {% endblock %}
 
 {% block content %}
-<label for="text">Изменить текст:</label>
+<label for="text">Изменить код:</label>
+<style type="text/css" media="screen">
+    #editor {
+        height: 500px;/*высота редактора*/
+    }
+</style>
+<pre id="editor"></pre>
+<input id="code" type="hidden" value="{{ text.text }}">
 <form action="{% url 'text:upd' text.id %}" method="post">
     {% csrf_token %}
-    <textarea style="height:200px;" class="form-control" name="textfield" id="text" required>{{ text.text }}</textarea>
+    <div class="ace-editor editor-control"></div>
+    <input type="hidden" name="textfield" id="textfield" value="{{ text.text }}">
     <input class="btn btn-primary" type="submit" value="Изменить">
 </form>
+<script>
+    var editor = ace.edit("editor");
+    editor.session.setMode("ace/mode/python");
+    code = document.getElementById("code").value;
+    editor.setValue(code)
+    function getcode(){
+        var editor = ace.edit("editor");
+        code = editor.getValue();
+        return code
+    }
+    editor.session.on('change', function(delta) {
+        $("#textfield").val(getcode());
+    });
+</script>
 {% endblock %}
