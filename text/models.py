@@ -21,3 +21,19 @@ class Text(models.Model):
             return (self.user.username)
         else:
             return ("Unknown")
+
+
+class Tag(models.Model):
+    text = models.ForeignKey(Text, null=True, on_delete=models.CASCADE)
+    tag = models.CharField(max_length=100, db_index=True)
+
+    @property
+    def get_tag(self):
+        return (self.tag)
+
+    @property
+    def get_code(self):
+        if self.text != None:
+            return (self.text.text)
+        else:
+            return ("Unknown")

@@ -8,11 +8,16 @@
             height: 500px;/*высота редактора*/
         }
     </style>
+    <label>Код</label>
     <pre id="editor"></pre>
-    <form action="{% url 'text:add' %}" method="post">
+    <form action="{% url 'text:create' %}" method="post">
         {% csrf_token %}
         <div class="ace-editor editor-control"></div>
         <input type="hidden" name="textfield" id="textfield" value="">
+        <label>Теги </label>
+        <div class="form-group">
+            <input type="text" name="tags" class="form-control">
+        </div>
         {% if request.user.is_authenticated %}
         <input class="btn btn-primary" type="submit" value="Добавить">
         {% else %}
@@ -23,7 +28,6 @@
         var editor = ace.edit("editor");
         editor.session.setMode("ace/mode/python");
         function getcode(){
-            var editor = ace.edit("editor");
             code = editor.getValue();
             return code
         }
