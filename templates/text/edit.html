@@ -11,7 +11,7 @@
 </style>
 <pre id="editor"></pre>
 <input id="code" type="hidden" value="{{ text.text }}">
-<form action="{% url 'text:upd' text.id %}" method="post">
+<form action="{% url 'text:edit' text.id %}" method="post">
     {% csrf_token %}
     <div class="ace-editor editor-control"></div>
     <input type="hidden" name="textfield" id="textfield" value="{{ text.text }}">
