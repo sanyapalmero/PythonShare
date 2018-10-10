@@ -3,8 +3,14 @@
 {% block title %} TextShare Detail {% endblock %}
 
 {% block content %}
-<strong>ID: {{ text.id }}</strong><br>
-<strong>Текст: </strong>{{ text.text|linebreaks }}
+<p style="font-weight:bold">ID: {{ text.id }}</p><br>
+<p style="font-weight:bold">Код:</p>{{ text.text|linebreaks }}
+<p style="font-weight:bold">
+    Теги:
+    {% for tag in tags %}
+    <a href="{%url 'text:search' tag.tag %}">{{ tag.tag }}</a>
+    {% endfor %}
+</p>
 {% if request.user.is_authenticated %}
 <a href="{% url 'text:create' %}">Создать новый</a> |
     {% if text.user_id == request.user.id %}

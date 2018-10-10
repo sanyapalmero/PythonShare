@@ -48,8 +48,9 @@ class DetailView(TemplateView):
 
     def get_context_data(self, text_id):
         text = get_object_or_404(models.Text, id=text_id)
+        tags = models.Tag.objects.filter(text = text)
         return_url = self.request.GET.get('next')
-        return {'text': text, 'url': return_url}
+        return {'text': text, 'url': return_url, 'tags': tags}
 
 
 @method_decorator(login_required, name='dispatch')
@@ -96,3 +97,12 @@ class DeleteView(TemplateView):
             return HttpResponseRedirect(return_url)
         else:
             return HttpResponseForbidden()
+
+
+@method_decorator(login_required, name='dispatch')
+class SearchByTagView(TemplateView):
+    template_name = 'text/tagsearch.html'
+
+    def get_context_data(self, tag):
+        texts = models.Tag.objects.filter(tag = tag)
+        return {'texts': texts, 'tag': tag}

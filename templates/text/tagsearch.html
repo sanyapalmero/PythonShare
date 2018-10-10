@@ -1,0 +1,23 @@
+{% extends "templates.html" %}
+
+{% block title %} Search {% endblock %}
+
+{% block content %}
+
+<div>
+    <p style="display: inline-block;">Тег: </p>
+    <p style="display: inline-block; font-weight: bold;">{{ tag }}</p>
+</div>
+<div>
+    <p style="display: inline-block;">Найдено совпадений: </p>
+    <p style="display: inline-block; font-weight: bold;">{{ texts.count }}</p>
+</div>
+<div>
+    {% for code in texts %}
+        <p>{{ code.text.text }}</p>
+        <p>___________________________________________________</p>
+    {% endfor %}
+</div>
+
+
+{% endblock %}
