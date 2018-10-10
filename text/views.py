@@ -33,11 +33,14 @@ class CreateView(View):
     def post(self, request):
         text_post = request.POST['textfield']
         tags = request.POST['tags']
+        list_tags = tags.split(',')
         text_obj = models.Text(text=text_post, user=request.user)
         text_obj.save()
-        tag_obj = models.Tag(tag = tags, text=text_obj)
-        tag_obj.save()
+        for tag in list_tags:
+            tag_obj = models.Tag(tag = tag, text=text_obj)
+            tag_obj.save()
         return redirect('text:detail', text_id=text_obj.id)
+
 
 @method_decorator(login_required, name='dispatch')
 class DetailView(TemplateView):
@@ -47,6 +50,7 @@ class DetailView(TemplateView):
         text = get_object_or_404(models.Text, id=text_id)
         return_url = self.request.GET.get('next')
         return {'text': text, 'url': return_url}
+
 
 @method_decorator(login_required, name='dispatch')
 class EditView(View):
@@ -69,6 +73,7 @@ class EditView(View):
             return redirect('text:detail', text_id=text.id)
         else:
             return HttpResponseForbidden()
+
 
 @method_decorator(login_required, name='dispatch')
 class DeleteView(TemplateView):

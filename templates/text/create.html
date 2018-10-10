@@ -5,7 +5,7 @@
 {% block content %}
     <style type="text/css" media="screen">
         #editor {
-            height: 500px;/*высота редактора*/
+            height: 450px;/*высота редактора*/
         }
     </style>
     <label>Код</label>
@@ -16,7 +16,7 @@
         <input type="hidden" name="textfield" id="textfield" value="">
         <label>Теги </label>
         <div class="form-group">
-            <input type="text" name="tags" class="form-control">
+            <input id="input-tags" name="tags">
         </div>
         {% if request.user.is_authenticated %}
         <input class="btn btn-primary" type="submit" value="Добавить">
@@ -34,5 +34,16 @@
         editor.session.on('change', function(delta) {
             $("#textfield").val(getcode());
         });
+        $('#input-tags').selectize({
+            delimiter: ',',
+            persist: false,
+            create: function(input) {
+                return {
+                    value: input,
+                    text: input
+                }
+            }
+        });
     </script>
+
 {% endblock %}
