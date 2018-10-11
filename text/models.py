@@ -9,7 +9,9 @@ class Text(models.Model):
     text = models.CharField(max_length=100)
     user = models.ForeignKey(
         User, null=True, blank=True, on_delete=models.CASCADE)
-    date = models.DateTimeField(default=timezone.now, blank=True)
+    date_creation = models.DateTimeField(default=timezone.now, blank=False)
+    date_last_change = models.DateTimeField(default=timezone.now, blank=False)
+    topic = models.CharField(max_length=100, null=True)
 
     @property
     def short_text(self):
@@ -26,10 +28,6 @@ class Text(models.Model):
 class Tag(models.Model):
     text = models.ForeignKey(Text, null=True, on_delete=models.CASCADE)
     tag = models.CharField(max_length=100, db_index=True)
-
-    @property
-    def get_tag(self):
-        return (self.tag)
 
     @property
     def get_code(self):

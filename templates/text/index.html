@@ -11,17 +11,21 @@
 <table class="table">
     <thead>
         <tr>
+            <th>Тема</th>
             <th>Код</th>
             <th>Дата создания</th>
+            <th>Дата изменения</th>
         </tr>
     </thead>
     <tbody>
         {% for text in texts %}
             <tr>
+                <td>{{ text.topic }}</td>
                 <td>
                     <a href="{% url 'text:detail' text.id %}?next={{ request.get_full_path|urlencode }}">{{ text.text|truncatewords:3 }}</a>
                 </td>
-                <td>{{ text.date }}</td>
+                <td>{{ text.date_creation }}</td>
+                <td>{{ text.date_last_change }}</td>
             </tr>
         {% endfor %}
     </tbody>
