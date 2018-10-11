@@ -3,10 +3,12 @@
 {% block title %} TextShare Detail {% endblock %}
 
 {% block content %}
-<label for="text">Просмотр кода</label>
+<label>Тема</label>
+<p>{{ text.topic }}</p>
+<label>Код</label>
 <style type="text/css" media="screen">
     #editor {
-        height: 500px;/*высота редактора*/
+        height: 400px;/*высота редактора*/
     }
 </style>
 <pre id="editor"></pre>

@@ -3,15 +3,13 @@
 {% block title %} TextShare Delete {% endblock %}
 
 {% block content %}
-<label for="text">Удалить текст:</label>
+<label for="text">Вы действительно хотите удалить код?</label><br>
+<p style="font-weight:bold; display:inline-block">Тема: </p>
+<p style="display:inline-block">{{ text.topic }}</p>
 <form action="{% url 'text:delete' text.id %}" method="post">
     {% csrf_token %}
-    {{ text.text }}
-    {% if request.user.is_authenticated %}
-        <input class="btn btn-danger" type="submit" value="Удалить">
-        <input type="hidden" name="next" value="{{ url }}">
-    {% else %}
-        <p class="text-danger">Авторизуйтесь, чтобы удалить текст!</p>
-    {% endif %}
+    <input class="btn btn-danger" type="submit" value="Удалить">
+    <a style="display:inline-block" href="{% url 'text:detail' text.id %}">Вернуться назад</a>
+    <input type="hidden" name="next" value="{{ url }}">
 </form>
 {% endblock %}

@@ -6,14 +6,23 @@
 <label for="text">Изменить код:</label>
 <style type="text/css" media="screen">
     #editor {
-        height: 500px;/*высота редактора*/
+        height: 400px;/*высота редактора*/
     }
 </style>
-<pre id="editor"></pre>
 <input id="code" type="hidden" value="{{ text.text }}">
 <form action="{% url 'text:edit' text.id %}" method="post">
     {% csrf_token %}
+    <label>Тема</label>
+    <div class="form-group">
+        <input class="form-control" type="text" name="topic" value="{{ text.topic }}" required>
+    </div>
+    <label for="text">Изменить код:</label>
+    <pre id="editor"></pre>
     <div class="ace-editor editor-control"></div>
+    <label>Теги</label>
+    <div class="form-group">
+        <input id="input-tags" name="tags">
+    </div>
     <input type="hidden" name="textfield" id="textfield" value="{{ text.text }}">
     <input class="btn btn-primary" type="submit" value="Изменить">
 </form>
@@ -29,6 +38,16 @@
     }
     editor.session.on('change', function(delta) {
         $("#textfield").val(getcode());
+    });
+    $('#input-tags').selectize({
+        delimiter: ',',
+        persist: false,
+        create: function(input) {
+            return {
+                value: input,
+                text: input
+            }
+        }
     });
 </script>
 {% endblock %}

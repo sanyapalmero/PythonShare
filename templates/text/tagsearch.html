@@ -14,8 +14,8 @@
 </div>
 <div>
     {% for code in texts %}
-        <p>{{ code.text.text }}</p>
-        <p>___________________________________________________</p>
+        <p style="display: inline-block;">Тема: {{ code.text.topic }} |</p>
+        <a style="display: inline-block;"href="{% url 'text:detail' code.text.id %}">Перейти</a><br>
     {% endfor %}
 </div>
 

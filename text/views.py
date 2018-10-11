@@ -7,6 +7,7 @@ from django.core.paginator import Paginator
 from . import forms
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
+from django.utils import timezone
 
 ENTRIES_COUNT = 20
 
@@ -33,8 +34,9 @@ class CreateView(View):
     def post(self, request):
         text_post = request.POST['textfield']
         tags = request.POST['tags']
+        topic = request.POST['topic']
         list_tags = tags.split(',')
-        text_obj = models.Text(text=text_post, user=request.user)
+        text_obj = models.Text(text=text_post, user=request.user, topic=topic)
         text_obj.save()
         for tag in list_tags:
             tag_obj = models.Tag(tag = tag, text=text_obj)
@@ -68,9 +70,17 @@ class EditView(View):
 
     def post(self, request, text_id):
         text = get_object_or_404(models.Text, id=text_id)
+        tag_obj = get_object_or_404(models.Tag, text=text)
         if request.user == text.user:
             text.text = request.POST['textfield']
+            text.topic = request.POST['topic']
+            text.date_last_change = timezone.now()
             text.save()
+            tags = request.POST['tags']
+            list_tags = tags.split(',')
+            for tag in list_tags:
+                tag_obj.tag = tag
+                tag_obj.save()
             return redirect('text:detail', text_id=text.id)
         else:
             return HttpResponseForbidden()
