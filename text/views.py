@@ -70,7 +70,9 @@ class EditView(View):
 
     def post(self, request, text_id):
         text = get_object_or_404(models.Text, id=text_id)
-        tag_obj = get_object_or_404(models.Tag, text=text)
+        tags_obj = models.Tag.objects.filter(text=text_id)
+        for obj in tags_obj:
+            obj.delete()
         if request.user == text.user:
             text.text = request.POST['textfield']
             text.topic = request.POST['topic']
@@ -79,7 +81,7 @@ class EditView(View):
             tags = request.POST['tags']
             list_tags = tags.split(',')
             for tag in list_tags:
-                tag_obj.tag = tag
+                tag_obj = models.Tag(tag = tag, text=text)
                 tag_obj.save()
             return redirect('text:detail', text_id=text.id)
         else:
