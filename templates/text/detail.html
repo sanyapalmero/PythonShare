@@ -3,12 +3,31 @@
 {% block title %} TextShare Detail {% endblock %}
 
 {% block content %}
-<p style="font-weight:bold">ID: {{ text.id }}</p><br>
-<p style="font-weight:bold">Код:</p>{{ text.text|linebreaks }}
+<label for="text">Просмотр кода</label>
+<style type="text/css" media="screen">
+    #editor {
+        height: 500px;/*высота редактора*/
+    }
+</style>
+<pre id="editor"></pre>
+<input id="code" type="hidden" value="{{ text.text }}">
+<script>
+    var editor = ace.edit("editor");
+    editor.session.setMode("ace/mode/python");
+    code = document.getElementById("code").value;
+    editor.session.setValue(code)
+    editor.setOptions({
+        readOnly:true,
+        highlightActiveLine: false,
+        selectionStyle: "text"
+    });
+</script>
 <p style="font-weight:bold">
     Теги:
     {% for tag in tags %}
-    <a href="{%url 'text:search' tag.tag %}">{{ tag.tag }}</a>
+        {% if tag.tag != '' %}
+            <a href="{%url 'text:search' tag.tag %}">{{ tag.tag }}</a>
+        {% endif %}
     {% endfor %}
 </p>
 {% if request.user.is_authenticated %}
