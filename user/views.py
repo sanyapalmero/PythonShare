@@ -4,9 +4,12 @@ from . import forms
 from django.http import HttpResponse
 from . import models
 from django.contrib.auth import authenticate, login, logout
+from text.models import Text
+from django.core.paginator import Paginator
+
+ENTRIES_COUNT = 10
 
 
-# Create your views here.
 class CreateView(View):
     def get(self, request):
         form = forms.CreateUserForm()
@@ -48,3 +51,12 @@ class LogOutView(View):
     def get(self, request):
         logout(request)
         return redirect('text:index')
+
+
+class ProfileView(View):
+    def get(self, request):
+        user_codes = Text.objects.filter(user=request.user)
+        paginator = Paginator(user_codes, ENTRIES_COUNT)
+        page = request.GET.get('page')
+        codes = paginator.get_page(page)
+        return render(request, 'user/profile.html', {'codes': codes})
