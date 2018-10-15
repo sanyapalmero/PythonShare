@@ -15,14 +15,7 @@ ENTRIES_COUNT = 20
 @method_decorator(login_required, name='dispatch')
 class IndexView(View):
     def get(self, request):
-        texts_list = models.Text.objects.filter(user=request.user)
-        paginator = Paginator(texts_list, ENTRIES_COUNT)
-        page = request.GET.get('page')
-        texts = paginator.get_page(page)
-        return render(request, 'text/index.html', {
-            'texts': texts,
-            'request': request
-        })
+        return render(request, 'text/index.html')
 
 
 @method_decorator(login_required, name='dispatch')
@@ -118,3 +111,12 @@ class SearchByTagView(TemplateView):
     def get_context_data(self, tag):
         texts = models.Tag.objects.filter(tag = tag)
         return {'texts': texts, 'tag': tag}
+
+
+class AllCodeView(View):
+    def get(self, request):
+        all_codes = models.Text.objects.all()
+        paginator = Paginator(all_codes, ENTRIES_COUNT)
+        page = request.GET.get('page')
+        codes = paginator.get_page(page)
+        return render(request, 'text/allcode.html', {'codes': codes})

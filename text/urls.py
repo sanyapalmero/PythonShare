@@ -9,5 +9,6 @@ urlpatterns = [
     path('edit/<int:text_id>', views.EditView.as_view(), name='edit'),
     path('delete/<int:text_id>', views.DeleteView.as_view(), name='delete'),
     path('create/', views.CreateView.as_view(), name='create'),
-    path('search/<str:tag>',views.SearchByTagView.as_view(), name='search')
+    path('search/<str:tag>', views.SearchByTagView.as_view(), name='search'),
+    path('all/', views.AllCodeView.as_view(), name='all')
 ]
