@@ -30,6 +30,8 @@
                     {% if request.user.is_authenticated %}
                         <li><a href="{% url 'text:index' %}">Главная</a></li>
                         <li><a href="{% url 'text:create' %}">Создать</a></li>
+                        <li><a href="{% url 'text:all' %}">Общая таблица</a></li>
+                        <li><a href="{% url 'user:profile' %}">Профиль</a></li>
                     {% endif %}
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
