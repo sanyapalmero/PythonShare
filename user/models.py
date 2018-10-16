@@ -6,8 +6,8 @@ from django.db import models
 
 
 class UserManager(BaseUserManager):
-    def create_user(self, username, password, **kwargs):
-        user = self.model(username=username, **kwargs)
+    def create_user(self, username, password, avatar, **kwargs):
+        user = self.model(username=username, avatar=avatar, **kwargs)
         user.set_password(password)
         user.save(using=self._db)
         return user
@@ -36,6 +36,7 @@ class User(AbstractBaseUser):
     created_at = models.DateTimeField(default=timezone.now)
     role = models.CharField(
         max_length=64, choices=ROLE_CHOICES, default=ROLE_USER)
+    avatar = models.FileField(null=True, upload_to='user/avatars/')
 
     @property
     def is_superuser(self):

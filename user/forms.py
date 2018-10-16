@@ -6,6 +6,7 @@ class CreateUserForm(forms.Form):
     username = forms.CharField(label="Имя пользователя", max_length=20)
     password = forms.CharField(label="Пароль", max_length=128)
     repeat_password = forms.CharField(label="Повторите пароль", max_length=128)
+    avatar = forms.FileField()
 
     def clean_username(self):
         username = self.cleaned_data['username']
@@ -15,6 +16,10 @@ class CreateUserForm(forms.Form):
             self.add_error('username', error)
         except models.User.DoesNotExist:
             return username
+
+    def clean_avatar(self):
+        avatar = self.cleaned_data['avatar']
+        return avatar
 
     def clean(self):
         cleaned_data = super().clean()

@@ -4,7 +4,7 @@
 
 {% block content %}
 <h3>Регистрация</h3>
-<form action="{% url 'user:create' %}" method="post">
+<form action="{% url 'user:create' %}" method="post" enctype="multipart/form-data">
     {% csrf_token %}
     <div class="form-group">
         <label>Имя пользователя</label>
@@ -26,6 +26,10 @@
         {% for error in form.repeat_password.errors %}
             <p class="text-danger">{{ error }}</p>
         {% endfor %}
+    </div>
+    <div class="form-group">
+        <label>Аватар</label>
+        <input type="file" name="avatar">
     </div>
     <input class="btn btn-primary" type="submit" value="Зарегистрироваться">
 </form>

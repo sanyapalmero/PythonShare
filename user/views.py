@@ -16,12 +16,13 @@ class CreateView(View):
         return render(request, 'user/register.html', {'form': form})
 
     def post(self, request):
-        form = forms.CreateUserForm(request.POST)
+        form = forms.CreateUserForm(request.POST, request.FILES)
         if form.is_valid():
             username = form.cleaned_data['username']
             password = form.cleaned_data['password']
             repeat_password = form.cleaned_data['repeat_password']
-            user = models.User.objects.create_user(username, password)
+            avatar = form.cleaned_data['avatar']
+            user = models.User.objects.create_user(username, password, avatar)
             good = 'Вы успешно зарегистрированы!'
             return render(request, 'user/register.html', {
                 'form': form,
@@ -59,4 +60,4 @@ class ProfileView(View):
         paginator = Paginator(user_codes, ENTRIES_COUNT)
         page = request.GET.get('page')
         codes = paginator.get_page(page)
-        return render(request, 'user/profile.html', {'codes': codes})
+        return render(request, 'user/profile.html', {'codes': codes, 'all': user_codes})
