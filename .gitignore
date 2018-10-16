@@ -111,3 +111,6 @@ dmypy.json
 
 # IDE files
 .vscode/
+
+# Avatars
+user/avatars/
