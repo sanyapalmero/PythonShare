@@ -30,6 +30,9 @@
     <div class="form-group">
         <label>Аватар</label>
         <input type="file" name="avatar">
+        {% for error in form.avatar.errors %}
+            <p class="text-danger">{{ error }}</p>
+        {% endfor %}
     </div>
     <input class="btn btn-primary" type="submit" value="Зарегистрироваться">
 </form>
