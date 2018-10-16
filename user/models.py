@@ -36,7 +36,7 @@ class User(AbstractBaseUser):
     created_at = models.DateTimeField(default=timezone.now)
     role = models.CharField(
         max_length=64, choices=ROLE_CHOICES, default=ROLE_USER)
-    avatar = models.FileField(null=True, upload_to='user/avatars/')
+    avatar = models.FileField(null=True, upload_to='')
 
     @property
     def is_superuser(self):
