@@ -66,3 +66,17 @@ class ProfileView(View):
 class ProfileSettingsView(View):
     def get(self, request):
         return render(request, 'user/settings.html')
+
+
+class UpdateAvatarView(View):
+    def post(self, request):
+        user = get_object_or_404(models.User, username=request.user)
+        form = forms.SettingsForm(request.POST, request.FILES)
+        if form.is_valid():
+            avatar = form.cleaned_data['avatar']
+            user.avatar = avatar
+            user.save()
+            return redirect('user:profile')
+        else:
+            bad = 'Ошибка в обновлении аватара'
+            return render(request, 'user/settings.html', {'bad':bad})

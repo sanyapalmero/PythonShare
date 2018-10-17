@@ -39,6 +39,8 @@ class LoginUserForm(forms.Form):
 
 
 class SettingsForm(forms.Form):
-    old_password = forms.CharField()
-    new_password = forms.CharField()
     avatar = forms.FileField()
+
+    def clean_avatar(self):
+        avatar = self.cleaned_data['avatar']
+        return avatar
