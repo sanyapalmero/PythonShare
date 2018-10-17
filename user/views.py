@@ -61,3 +61,8 @@ class ProfileView(View):
         page = request.GET.get('page')
         codes = paginator.get_page(page)
         return render(request, 'user/profile.html', {'codes': codes, 'all': user_codes})
+
+
+class ProfileSettingsView(View):
+    def get(self, request):
+        return render(request, 'user/settings.html')

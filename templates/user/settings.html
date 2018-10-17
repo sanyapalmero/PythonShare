@@ -1,0 +1,45 @@
+{% extends "templates.html" %}
+
+{% block content %}
+<p style="text-align:center; font-weight:bold;">Настройки профиля {{request.user}}</p>
+<div class="row">
+    <div class="col-md-4">
+        <p style="font-weight:bold;">Аватар:</p>
+        <img src="{{request.user.avatar.url}}" style="width:100px; height:100px; border-radius: 100px; border: 3px solid #228f9a;">
+        <form style="margin-top:10px" action="{% url 'user:create' %}" method="post" enctype="multipart/form-data">
+            <div class="form-group">
+                <input type="file" name="avatar">
+                {% for error in form.avatar.errors %}
+                    <p class="text-danger">{{ error }}</p>
+                {% endfor %}
+            </div>
+            <input class="btn btn-primary" type="submit" value="Обновить аватар">
+        </form>
+    </div>
+    <div class="col-md-4">
+        <p style="font-weight:bold;">Смена пароля</p>
+        <form action="{% url 'user:create' %}" method="post">
+            {% csrf_token %}
+            <div class="form-group">
+                <label>Старый пароль</label>
+                <input style="width:250px;" type="password" class="form-control" name="old_password">
+                {% for error in form.old_password.errors %}
+                    <p class="text-danger">{{ error }}</p>
+                {% endfor %}
+            </div>
+            <div class="form-group">
+                <label>Повторите пароль</label>
+                <input style="width:250px;" type="password" class="form-control" name="new_password">
+                {% for error in form.new_password.errors %}
+                    <p class="text-danger">{{ error }}</p>
+                {% endfor %}
+            </div>
+            <input class="btn btn-primary" type="submit" value="Изменить пароль">
+        </form>
+    </div>
+    <div class="col-md-4">
+        <p style="font-weight:bold;">Информация</p>
+        <p>Дата регистрации {{ request.user.created_at }}</p>
+    </div>
+</div>
+{% endblock %}

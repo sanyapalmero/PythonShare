@@ -36,3 +36,9 @@ class CreateUserForm(forms.Form):
 class LoginUserForm(forms.Form):
     username = forms.CharField(label="Ваше имя", max_length=20)
     password = forms.CharField(label="Пароль", max_length=128)
+
+
+class SettingsForm(forms.Form):
+    old_password = forms.CharField()
+    new_password = forms.CharField()
+    avatar = forms.FileField()
