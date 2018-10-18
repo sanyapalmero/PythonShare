@@ -38,9 +38,22 @@ class LoginUserForm(forms.Form):
     password = forms.CharField(label="Пароль", max_length=128)
 
 
-class SettingsForm(forms.Form):
+class AvatarForm(forms.Form):
     avatar = forms.FileField()
 
     def clean_avatar(self):
         avatar = self.cleaned_data['avatar']
         return avatar
+
+
+class UpdPasswordForm(forms.Form):
+    old_password = forms.CharField()
+    new_password = forms.CharField()
+
+    def clean_old_password(self):
+        old_password = self.cleaned_data['old_password']
+        return old_password
+
+    def clean_new_password(self):
+        new_password = self.cleaned_data['new_password']
+        return new_password

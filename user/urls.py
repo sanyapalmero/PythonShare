@@ -12,5 +12,7 @@ urlpatterns = [
     path(
         'settings/setavatar',
         views.UpdateAvatarView.as_view(),
-        name='setavatar')
+        name='setavatar'),
+    path(
+        'settings/setpass', views.UpdatePasswordView.as_view(), name='setpass')
 ]

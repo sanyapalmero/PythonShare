@@ -22,21 +22,18 @@
     </div>
     <div class="col-md-4">
         <p style="font-weight:bold;">Смена пароля</p>
-        <form action="{% url 'user:create' %}" method="post">
+        <form action="{% url 'user:setpass' %}" method="post">
             {% csrf_token %}
             <div class="form-group">
                 <label>Старый пароль</label>
                 <input style="width:250px;" type="password" class="form-control" name="old_password">
-                {% for error in form.old_password.errors %}
-                    <p class="text-danger">{{ error }}</p>
-                {% endfor %}
+                {% if bad_pass %}
+                    <p style="color:red">{{ bad_pass }}</p>
+                {% endif %}
             </div>
             <div class="form-group">
                 <label>Новый пароль</label>
                 <input style="width:250px;" type="password" class="form-control" name="new_password">
-                {% for error in form.new_password.errors %}
-                    <p class="text-danger">{{ error }}</p>
-                {% endfor %}
             </div>
             <input class="btn btn-primary" type="submit" value="Изменить пароль">
         </form>
