@@ -71,29 +71,27 @@ class ProfileSettingsView(View):
 class UpdateAvatarView(View):
     def post(self, request):
         user = get_object_or_404(models.User, username=request.user)
-        form = forms.AvatarForm(request.POST, request.FILES)
-        if form.is_valid():
-            avatar = form.cleaned_data['avatar']
+        try:
+            avatar = request.FILES['avatar']
             user.avatar = avatar
             user.save()
             return redirect('user:profile')
-        else:
-            bad = 'Ошибка в обновлении аватара'
-            return render(request, 'user/settings.html', {'bad':bad})
+        except KeyError:
+            error = "Ошибка при загрузке аватара"
+            return render(request, 'user/settings.html', {'bad_avatar':error})
+
 
 
 class UpdatePasswordView(View):
     def post(self, request):
         user = get_object_or_404(models.User, username=request.user)
-        form = forms.UpdPasswordForm(request.POST, request.FILES)
-        if form.is_valid():
-            old_password = form.cleaned_data['old_password']
-            new_password = form.cleaned_data['new_password']
-            if user.check_password(old_password):
-                user.set_password(new_password)
-                user.save()
-                good = "Пароль успешно был изменен, авторизуйтесь снова."
-                return render(request, 'user/login.html', {'good_pass': good})
-            else:
-                error = "Пароли не совпадают!"
-                return render(request, 'user/settings.html', {'bad_pass': error})
+        old_password = request.POST['old_password']
+        new_password = request.POST['new_password']
+        if user.check_password(old_password):
+            user.set_password(new_password)
+            user.save()
+            good = "Пароль успешно был изменен, авторизуйтесь снова."
+            return render(request, 'user/login.html', {'good_pass': good})
+        else:
+            error = "Пароли не совпадают!"
+            return render(request, 'user/settings.html', {'bad_pass': error})
