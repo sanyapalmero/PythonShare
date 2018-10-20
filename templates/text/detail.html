@@ -3,51 +3,97 @@
 {% block title %} TextShare Detail {% endblock %}
 
 {% block content %}
-<label>Тема</label>
-<p>{{ text.topic }}</p>
-<label>Код</label>
-<style type="text/css" media="screen">
-    #editor {
-        height: 400px;/*высота редактора*/
-    }
-</style>
-<pre id="editor"></pre>
-<input id="code" type="hidden" value="{{ text.text }}">
-<script>
-    var editor = ace.edit("editor");
-    editor.session.setMode("ace/mode/python");
-    code = document.getElementById("code").value;
-    editor.session.setValue(code)
-    editor.setOptions({
-        readOnly:true,
-        highlightActiveLine: false,
-        selectionStyle: "text"
-    });
-</script>
-<p style="font-weight:bold">
-    Теги:
-    {% for tag in tags %}
-        {% if tag.tag != '' %}
-            <a href="{%url 'text:search' tag.tag %}">{{ tag.tag }}</a>
+<div class="form-group">
+    <label>Тема</label>
+    <p>{{ text.topic }}</p>
+    <label>Код</label>
+    <style type="text/css" media="screen">
+        #editor {
+            height: 400px;/*высота редактора*/
+        }
+    </style>
+    <pre id="editor"></pre>
+    <input id="code" type="hidden" value="{{ text.text }}">
+    <script>
+        var editor = ace.edit("editor");
+        editor.session.setMode("ace/mode/python");
+        code = document.getElementById("code").value;
+        editor.session.setValue(code)
+        editor.setOptions({
+            readOnly:true,
+            highlightActiveLine: false,
+            selectionStyle: "text"
+        });
+    </script>
+    <p style="font-weight:bold">
+        Теги:
+        {% for tag in tags %}
+            {% if tag.tag != '' %}
+                <a href="{%url 'text:search' tag.tag %}">{{ tag.tag }}</a>
+            {% endif %}
+        {% endfor %}
+    </p>
+    {% if request.user.is_authenticated %}
+    <span style="color:rgb(115, 165, 206)">
+        <i class="fas fa-file"></i>
+    </span>
+    <a href="{% url 'text:create' %}">Создать новый</a> |
+        {% if text.user_id == request.user.id %}
+            <span style="color:rgb(115, 165, 206)">
+                <i class="fas fa-edit"></i>
+            </span>
+            <a href="{% url 'text:edit' text.id %}">Изменить</a> |
+            <span style="color:rgb(115, 165, 206)">
+                <i class="fas fa-trash-alt"></i>
+            </span>
+            <a href="{% url 'text:delete' text.id %}?next={{ url }}">Удалить</a>
         {% endif %}
-    {% endfor %}
-</p>
-{% if request.user.is_authenticated %}
-<span style="color:rgb(115, 165, 206)">
-    <i class="fas fa-file"></i>
-</span>
-<a href="{% url 'text:create' %}">Создать новый</a> |
-    {% if text.user_id == request.user.id %}
-        <span style="color:rgb(115, 165, 206)">
-            <i class="fas fa-edit"></i>
-        </span>
-        <a href="{% url 'text:edit' text.id %}">Изменить</a> |
-        <span style="color:rgb(115, 165, 206)">
-            <i class="fas fa-trash-alt"></i>
-        </span>
-        <a href="{% url 'text:delete' text.id %}?next={{ url }}">Удалить</a>
+    {% else %}
+        <p class="text-danger">Авторизуйтесь, чтобы добавлять/изменять тексты</p>
     {% endif %}
-{% else %}
-<p class="text-danger">Авторизуйтесь, чтобы добавлять/изменять тексты</p>
-{% endif %}
+</div>
+<div class="comments form-group">
+    <div class="add-comment form-group">
+        <label>Комментарии</label>
+        <form action="{% url 'text:addcomment' text.id %}" method="post">
+            {% csrf_token %}
+            <img src="{{request.user.avatar.url}}" style="width:60px; height:60px; border-radius: 60px; border: 2px solid #228f9a; display: inline-block;">
+            <input type="text" name="comment" class="form-control" style="display: inline-block; width: 80%;">
+            <input class="btn btn-primary" type="submit" value="Отправить" style="display: inline-block;">
+        </form>
+    </div>
+    <style>
+        .comment {border-radius: 10px; border: 1px solid #228f9a; overflow: hidden; padding: 5px}
+        .avatar, .name-comment {float: left;}
+        .avatar {width: 6%;}
+        .avatar img {width:60px; height:60px; border-radius: 60px; border: 2px solid #228f9a;}
+        .name-comment {width: 55%;}
+        .date, .buttons {width: 20%; float: right;}
+        .comm {margin-top: 15px;}
+        .buttons a{float: right; margin-right: 30px; margin-top: 20px;}
+    </style>
+    <div class="all-comments form-group">
+        {% for comment in comments %}
+        <div class="comment form-group">
+            <div class="avatar">
+                <img src="{{comment.user.avatar.url}}">
+            </div>
+            <div class="name-comment">
+                <div class="name">
+                    {{comment.user}}
+                </div>
+                <div class="comm">
+                    {{comment.comment}}
+                </div>
+            </div>
+            <div class="date">
+                Дата: {{comment.date_creation}}
+            </div>
+            <div class="buttons">
+                <a>Удалить</a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
 {% endblock %}

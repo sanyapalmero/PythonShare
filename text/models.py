@@ -35,3 +35,10 @@ class Tag(models.Model):
             return (self.text.text)
         else:
             return ("Unknown")
+
+
+class Comment(models.Model):
+    text = models.ForeignKey(Text, null=True, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, null=True, blank=True, on_delete=models.CASCADE)
+    comment = models.CharField(max_length=500, db_index=True)
+    date_creation = models.DateTimeField(default=timezone.now, blank=False)

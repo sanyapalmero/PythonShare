@@ -44,8 +44,9 @@ class DetailView(TemplateView):
     def get_context_data(self, text_id):
         text = get_object_or_404(models.Text, id=text_id)
         tags = models.Tag.objects.filter(text = text)
+        comments = models.Comment.objects.filter(text = text)
         return_url = self.request.GET.get('next')
-        return {'text': text, 'url': return_url, 'tags': tags}
+        return {'text': text, 'url': return_url, 'tags': tags, 'comments': comments}
 
 
 @method_decorator(login_required, name='dispatch')
@@ -120,3 +121,12 @@ class AllCodeView(View):
         page = request.GET.get('page')
         codes = paginator.get_page(page)
         return render(request, 'text/allcode.html', {'codes': codes})
+
+
+class CreateCommentView(View):
+    def post(self, request, text_id):
+        comment = request.POST['comment']
+        text_obj = get_object_or_404(models.Text, id=text_id)
+        comm_obj = models.Comment(comment=comment, user=request.user, text=text_obj)
+        comm_obj.save()
+        return redirect('text:detail', text_id=text_obj.id)
