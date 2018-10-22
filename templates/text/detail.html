@@ -82,7 +82,7 @@
                 <div class="name">
                     {{comment.user}}
                 </div>
-                <div class="comm">
+                <div class="comm" id="{{comment.id}}">
                     {{comment.comment}}
                 </div>
             </div>
@@ -90,7 +90,10 @@
                 Дата: {{comment.date_creation}}
             </div>
             <div class="buttons">
+                {% if request.user == comment.user %}
                 <a>Удалить</a>
+                <a>Изменить</a>
+                {% endif %}
             </div>
         </div>
         {% endfor %}
