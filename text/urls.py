@@ -14,5 +14,9 @@ urlpatterns = [
     path(
         'addcomment/<int:text_id>',
         views.CreateCommentView.as_view(),
-        name='addcomment')
+        name='addcomment'),
+    path(
+        'comment/<int:comment_id>/<int:text_id>',
+        views.UpdateCommentView.as_view(),
+        name='updcomment')
 ]

@@ -130,3 +130,11 @@ class CreateCommentView(View):
         comm_obj = models.Comment(comment=comment, user=request.user, text=text_obj)
         comm_obj.save()
         return redirect('text:detail', text_id=text_obj.id)
+
+
+class UpdateCommentView(View):
+    def post(self, request, comment_id, text_id):
+        comm = get_object_or_404(models.Comment, id=comment_id)
+        comm.comment = request.POST['comment']
+        comm.save()
+        return redirect('text:detail', text_id=text_id)
