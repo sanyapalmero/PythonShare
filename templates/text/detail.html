@@ -84,7 +84,7 @@
                 </div>
                 <div class="comm" id="comment-{{comment.id}}">
                     <input type="hidden" value="{{comment.id}}" id="comment_id">
-                    <p id="{{comment.id}}">{{comment.comment}}</p>
+                    <p>{{comment.comment}}</p>
                 </div>
                 <div class="edit-comm" id="editcomment-{{comment.id}}" style="display:none">
                     <form action="{% url 'text:updcomment' comment.id text.id %}" method="post">
@@ -97,10 +97,10 @@
             <div class="date">
                 Дата: {{comment.date_creation}}
             </div>
-            <div class="buttons">
+            <div class="buttons" id="{{comment.id}}">
                 {% if request.user == comment.user %}
                 <a>Удалить</a>
-                <a id="edit" href="#" onclick="showinput()">Изменить</a>
+                <a id="edit" href="javascript:void(0)" onclick="showinput($(this).closest('div').attr('id'))">Изменить</a>
                 {% endif %}
             </div>
         </div>
@@ -109,9 +109,8 @@
 </div>
 <script>
     var doc = document;
-    function showinput()
+    function showinput(comm_id)
     {
-        var comm_id = doc.getElementById('comment_id').value;
         doc.getElementById("comment-"+comm_id+"").style.display = 'none';
         doc.getElementById("editcomment-"+comm_id+"").style.display = 'inline';
     }
