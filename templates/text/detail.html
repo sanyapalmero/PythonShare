@@ -82,22 +82,23 @@
                 <div class="name">
                     {{comment.user}}
                 </div>
-                <div class="comm" id="comment-{{comment.id}}">
-                    <input type="hidden" value="{{comment.id}}" id="comment_id">
+                <div class="comm" id="{{comment.id}}comment">
+                    <input type="hidden" value="{{comment.id}}" id="id-{{comment.id}}">
                     <p>{{comment.comment}}</p>
                 </div>
-                <div class="edit-comm" id="editcomment-{{comment.id}}" style="display:none">
+                <div class="edit-comm" id="{{comment.id}}editcomment" style="display:none">
                     <form action="{% url 'text:updcomment' comment.id text.id %}" method="post">
                         {% csrf_token %}
                         <input type="text" value="{{comment.comment}}" name="comment" class="form-control" style="width:500px; display:inline-block">
                         <input type="submit" value="Сохранить" class="btn btn-primary" style="display:inline-block">
                     </form>
+                    <a href="javascript:void(0)" onclick="hideinput($(this).closest('div').attr('id'))">Отмена</a>
                 </div>
             </div>
             <div class="date">
                 Дата: {{comment.date_creation}}
             </div>
-            <div class="buttons" id="{{comment.id}}">
+            <div class="buttons" id="{{comment.id}}edit">
                 {% if request.user == comment.user %}
                 <a>Удалить</a>
                 <a id="edit" href="javascript:void(0)" onclick="showinput($(this).closest('div').attr('id'))">Изменить</a>
@@ -111,12 +112,15 @@
     var doc = document;
     function showinput(comm_id)
     {
-        doc.getElementById("comment-"+comm_id+"").style.display = 'none';
-        doc.getElementById("editcomment-"+comm_id+"").style.display = 'inline';
+        var id = parseInt(comm_id)
+        doc.getElementById(""+id+"comment").style.display = 'none';
+        doc.getElementById(""+id+"editcomment").style.display = 'inline';
     }
-    function hideinput()
+    function hideinput(comm_id)
     {
-
+        var id = parseInt(comm_id)
+        doc.getElementById(""+id+"comment").style.display = 'block';
+        doc.getElementById(""+id+"editcomment").style.display = 'none';
     }
 </script>
 {% endblock %}
