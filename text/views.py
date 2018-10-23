@@ -141,3 +141,12 @@ class UpdateCommentView(View):
             return redirect('text:detail', text_id=text_id)
         else:
             return HttpResponseForbidden()
+
+class DeleteCommentView(View):
+    def post(self, request, comment_id, text_id):
+        comm = get_object_or_404(models.Comment, id=comment_id)
+        if request.user == comm.user:
+            comm.delete()
+            return redirect('text:detail', text_id=text_id)
+        else:
+            return HttpResponseForbidden()

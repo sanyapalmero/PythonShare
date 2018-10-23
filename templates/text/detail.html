@@ -100,8 +100,11 @@
             </div>
             <div class="buttons" id="{{comment.id}}edit">
                 {% if request.user == comment.user %}
-                <a>Удалить</a>
-                <a id="edit" href="javascript:void(0)" onclick="showinput($(this).closest('div').attr('id'))">Изменить</a>
+                <form action="{% url 'text:delcomment' comment.id text.id %}" method="post">
+                    {% csrf_token %}
+                    <input type="submit" value="Удалить" class="btn btn-danger btn-sm" style="float: right; margin-right: 30px;">
+                    <input type="button" onclick="showinput($(this).closest('div').attr('id'))" value="Изменить" class="btn btn-primary btn-sm" style="float: right; margin-right: 5px;">
+                </form>
                 {% endif %}
             </div>
         </div>
