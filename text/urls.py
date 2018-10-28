@@ -5,7 +5,7 @@ app_name = 'text'
 
 urlpatterns = [
     path('', views.IndexView.as_view(), name='index'),
-    path('text/<int:text_id>', views.DetailView.as_view(), name='detail'),
+    path('codeid/<int:text_id>', views.DetailView.as_view(), name='detail'),
     path('edit/<int:text_id>', views.EditView.as_view(), name='edit'),
     path('delete/<int:text_id>', views.DeleteView.as_view(), name='delete'),
     path('create/', views.CreateView.as_view(), name='create'),
