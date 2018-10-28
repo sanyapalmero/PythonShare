@@ -82,11 +82,11 @@
                 <div class="name">
                     {{comment.user}}
                 </div>
-                <div class="comm" id="{{comment.id}}comment">
+                <div class="comm" id="{{comment.id}}comment" data-comment-id="{{comment.id}}">
                     <input type="hidden" value="{{comment.id}}" id="id-{{comment.id}}">
                     <p>{{comment.comment}}</p>
                 </div>
-                <div class="edit-comm" id="{{comment.id}}editcomment" style="display:none">
+                <div class="edit-comm" id="{{comment.id}}editcomment" data-comment-id="{{comment.id}}" style="display:none">
                     <form action="{% url 'text:updcomment' comment.id text.id %}" method="post">
                         {% csrf_token %}
                         <input type="text" value="{{comment.comment}}" name="comment" class="form-control" style="width:500px; display:inline-block">
@@ -98,7 +98,7 @@
             <div class="date">
                 Дата: {{comment.date_creation}}
             </div>
-            <div class="buttons" id="{{comment.id}}edit">
+            <div class="buttons" id="{{comment.id}}edit" data-comment-id="{{comment.id}}">
                 {% if request.user == comment.user %}
                 <form action="{% url 'text:delcomment' comment.id text.id %}" method="post">
                     {% csrf_token %}
@@ -115,13 +115,15 @@
     var doc = document;
     function showinput(comm_id)
     {
-        var id = parseInt(comm_id)
+        var comment = doc.getElementById(comm_id);
+        var id = comment.dataset.commentId;
         doc.getElementById(""+id+"comment").style.display = 'none';
         doc.getElementById(""+id+"editcomment").style.display = 'inline';
     }
     function hideinput(comm_id)
     {
-        var id = parseInt(comm_id)
+        var comment = doc.getElementById(comm_id);
+        var id = comment.dataset.commentId;
         doc.getElementById(""+id+"comment").style.display = 'block';
         doc.getElementById(""+id+"editcomment").style.display = 'none';
     }
