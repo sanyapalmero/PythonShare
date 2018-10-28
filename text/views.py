@@ -38,15 +38,28 @@ class CreateView(View):
 
 
 @method_decorator(login_required, name='dispatch')
-class DetailView(TemplateView):
-    template_name = 'text/detail.html'
-
-    def get_context_data(self, text_id):
+class DetailView(View):
+    def get(self, request, text_id):
         text = get_object_or_404(models.Text, id=text_id)
         tags = models.Tag.objects.filter(text = text)
         comments = models.Comment.objects.filter(text = text)
-        return_url = self.request.GET.get('next')
-        return {'text': text, 'url': return_url, 'tags': tags, 'comments': comments}
+        return render(request, 'text/detail.html', {
+            'text': text,
+            'tags': tags,
+            'comments': comments
+            })
+
+    def post(self, request, text_id):
+        text = get_object_or_404(models.Text, id=text_id)
+        tags = models.Tag.objects.filter(text = text)
+        comments = models.Comment.objects.filter(text = text)
+        return_url = request.POST['return_url']
+        return render(request, 'text/detail.html', {
+            'text': text,
+            'tags': tags,
+            'url': return_url,
+            'comments': comments
+            })
 
 
 @method_decorator(login_required, name='dispatch')
