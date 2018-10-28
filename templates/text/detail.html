@@ -53,12 +53,12 @@
     {% endif %}
 </div>
 <div class="comments form-group">
-    <div class="add-comment form-group">
+    <div class="add-comment form-group" id="add-comment">
         <label>Комментарии</label>
         <form action="{% url 'text:addcomment' text.id %}" method="post">
             {% csrf_token %}
             <img src="{{request.user.avatar.url}}" style="width:60px; height:60px; border-radius: 60px; border: 2px solid #228f9a; display: inline-block;">
-            <input type="text" name="comment" class="form-control" style="display: inline-block; width: 80%;">
+            <input id="comment-field" type="text" name="comment" class="form-control" style="display: inline-block; width: 80%;">
             <input class="btn btn-primary" type="submit" value="Отправить" style="display: inline-block;">
         </form>
     </div>
@@ -82,9 +82,10 @@
                 <div class="name">
                     {{comment.user}}
                 </div>
-                <div class="comm" id="{{comment.id}}comment" data-comment-id="{{comment.id}}">
+                <div class="comm" id="{{comment.id}}comment" data-comment-id="{{comment.id}}" data-comment-name="{{comment.user}}">
                     <input type="hidden" value="{{comment.id}}" id="id-{{comment.id}}">
                     <p>{{comment.comment}}</p>
+                    <a style="color:#228f9a" href="#add-comment" onclick="reply($(this).closest('div').attr('id'))">Ответить</a>
                 </div>
                 <div class="edit-comm" id="{{comment.id}}editcomment" data-comment-id="{{comment.id}}" style="display:none">
                     <form action="{% url 'text:updcomment' comment.id text.id %}" method="post">
@@ -126,6 +127,13 @@
         var id = comment.dataset.commentId;
         doc.getElementById(""+id+"comment").style.display = 'block';
         doc.getElementById(""+id+"editcomment").style.display = 'none';
+    }
+    function reply(comm_id)
+    {
+        var comment = doc.getElementById(comm_id);
+        var name = comment.dataset.commentName;
+        var field = doc.getElementById('comment-field');
+        field.value = "@" + name + ", ";
     }
 </script>
 {% endblock %}
