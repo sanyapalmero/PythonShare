@@ -17,7 +17,7 @@
             <tr>
                 <td>{{ code.topic }}</td>
                 <td>
-                    <a href="{% url 'text:detail' code.id %}?next={{ request.get_full_path|urlencode }}">{{ code.text|truncatewords:3 }}</a>
+                    <a href="{% url 'text:detail' code.id %}">{{ code.text|truncatewords:3 }}</a>
                 </td>
                 <td>{{ code.date_creation }}</td>
                 <td>{{ code.date_last_change }}</td>
