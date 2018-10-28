@@ -23,11 +23,26 @@
         </tr>
     </thead>
     <tbody>
+        <style>
+            .form-inputs:hover
+            {
+                text-decoration: underline;
+            }
+        </style>
         {% for code in codes %}
             <tr>
                 <td>{{ code.topic }}</td>
                 <td>
-                    <a href="{% url 'text:detail' code.id %}?next={{ request.get_full_path|urlencode }}">{{ code.text|truncatewords:3 }}</a>
+                    <form action="{% url 'text:detail' code.id %}" method="post">
+                        {% csrf_token %}
+                        <input type="hidden" name="return_url" value="?next={{ request.get_full_path|urlencode }}">
+                        <input
+                            class="form-inputs"
+                            type="submit"
+                            value="{{ code.text|truncatewords:3 }}"
+                            style="border:none; background: none; color: blue"
+                            >
+                    </form>
                 </td>
                 <td>{{ code.date_creation }}</td>
                 <td>{{ code.date_last_change }}</td>
