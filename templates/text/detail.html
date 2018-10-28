@@ -4,9 +4,9 @@
 
 {% block content %}
 <div class="form-group">
-    <label>Тема</label>
-    <p>{{ text.topic }}</p>
-    <label>Код</label>
+    <label>Тема: </label>
+    <p style="display:inline-block">{{ text.topic }}</p>
+    <p>Код</p>
     <style type="text/css" media="screen">
         #editor {
             height: 400px;/*высота редактора*/
@@ -46,7 +46,7 @@
             <span style="color:rgb(115, 165, 206)">
                 <i class="fas fa-trash-alt"></i>
             </span>
-            <a href="{% url 'text:delete' text.id %}?next={{ url }}">Удалить</a>
+            <a href="{% url 'text:delete' text.id %}{{ url }}">Удалить</a>
         {% endif %}
     {% else %}
         <p class="text-danger">Авторизуйтесь, чтобы добавлять/изменять тексты</p>
