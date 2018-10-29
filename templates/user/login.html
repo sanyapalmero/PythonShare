@@ -1,5 +1,7 @@
 {% extends "templates.html" %}
 
+{% block title %} Login {% endblock %}
+
 {% block content %}
     <h3>Авторизация</h3>
     <form action="{% url 'user:login' %}" method="post">
