@@ -59,6 +59,7 @@
             {% csrf_token %}
             <img src="{{request.user.avatar.url}}" style="width:60px; height:60px; border-radius: 60px; border: 2px solid #228f9a; display: inline-block;">
             <input id="comment-field" type="text" name="comment" class="form-control" style="display: inline-block; width: 80%;">
+            <input type="hidden" name="reply_to" id="reply_to" value="">
             <input class="btn btn-primary" type="submit" value="Отправить" style="display: inline-block;">
         </form>
     </div>
@@ -74,17 +75,20 @@
     </style>
     <div class="all-comments form-group">
         {% for comment in comments %}
-        <div class="comment form-group">
+        <div class="comment form-group" id="com{{comment.id}}">
             <div class="avatar">
                 <img src="{{comment.user.avatar.url}}">
             </div>
             <div class="name-comment">
                 <div class="name">
                     {{comment.user}}
+                    {% if comment.reply_to %}
+                        <p>В ответ: <a href="#com{{comment.reply_to.id}}">{{comment.reply_to.user.username}}</a></p>
+                    {% endif %}
                 </div>
                 <div class="comm" id="{{comment.id}}comment" data-comment-id="{{comment.id}}" data-comment-name="{{comment.user}}">
                     <input type="hidden" value="{{comment.id}}" id="id-{{comment.id}}">
-                    <p>{{comment.comment}}</p>
+                    <p>{{comment.commentary}}</p>
                     <a style="color:#228f9a" href="#add-comment" onclick="reply($(this).closest('div').attr('id'))">Ответить</a>
                 </div>
                 <div class="edit-comm" id="{{comment.id}}editcomment" data-comment-id="{{comment.id}}" style="display:none">
@@ -133,7 +137,10 @@
         var comment = doc.getElementById(comm_id);
         var name = comment.dataset.commentName;
         var field = doc.getElementById('comment-field');
-        field.value = "@" + name + ", ";
+        field.value = name + ", ";
+        var reply_to = doc.getElementById('reply_to');
+        var id = comment.dataset.commentId;
+        reply_to.value = id;
     }
 </script>
 {% endblock %}
