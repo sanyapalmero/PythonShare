@@ -12,7 +12,6 @@ from django.utils import timezone
 ENTRIES_COUNT = 20
 
 
-@method_decorator(login_required, name='dispatch')
 class IndexView(View):
     def get(self, request):
         return render(request, 'text/index.html')
