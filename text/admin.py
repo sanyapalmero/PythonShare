@@ -15,4 +15,4 @@ class TagAdmin(admin.ModelAdmin):
 
 @admin.register(Comment)
 class CommentAdmin(admin.ModelAdmin):
-    list_display = ('id', 'comment', 'user', 'text')
+    list_display = ('id', 'commentary', 'user', 'text')
