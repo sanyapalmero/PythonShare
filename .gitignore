@@ -114,3 +114,6 @@ dmypy.json
 
 # media files
 media/
+
+# static_root folder
+static_root/

@@ -24,7 +24,7 @@ SECRET_KEY = '6aqo$*33#3it*(z%nfdatu(^t#&*k%usajh3l#m#s!sail)lk%'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 # Application definition
 
@@ -77,8 +77,10 @@ WSGI_APPLICATION = 'main.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.mysql',
+        'OPTIONS':{
+		'read_default_file':'/home/palmero/PythonShare/my.cnf',
+	}
     }
 }
 
@@ -122,9 +124,10 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, "static"),
-    '/var/www/static/',
+    os.path.join(BASE_DIR, "static")
 ]
+STATIC_ROOT=os.path.join(BASE_DIR, "static_root/")
+
 AUTH_USER_MODEL = 'user.User'
 
 LOGIN_URL = '/user/login/'
