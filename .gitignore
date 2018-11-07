@@ -117,3 +117,10 @@ media/
 
 # static_root folder
 static_root/
+
+# Deploying files
+datadump.json
+my.cnf 
+nginx.conf 
+uwsgi.ini
+uwsgi_params
