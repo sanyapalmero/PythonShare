@@ -29,10 +29,7 @@ class CreateView(View):
                 avatar = "default.png"
             user = models.User.objects.create_user(username, password, avatar)
             good = 'Вы успешно зарегистрированы!'
-            return render(request, 'user/register.html', {
-                'form': form,
-                'good': good
-            })
+            return render(request, 'user/login.html', {'good': good})
         else:
             return render(request, 'user/register.html', {'form': form})
 
