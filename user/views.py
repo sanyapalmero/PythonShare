@@ -6,6 +6,8 @@ from . import models
 from django.contrib.auth import authenticate, login, logout
 from text.models import Text
 from django.core.paginator import Paginator
+from django.contrib.auth.decorators import login_required
+from django.utils.decorators import method_decorator
 
 ENTRIES_COUNT = 10
 
@@ -54,6 +56,7 @@ class LogOutView(View):
         return redirect('text:index')
 
 
+@method_decorator(login_required, name='dispatch')
 class ProfileView(View):
     def get(self, request):
         user_codes = Text.objects.filter(user=request.user)
@@ -63,11 +66,13 @@ class ProfileView(View):
         return render(request, 'user/profile.html', {'codes': codes, 'all': user_codes})
 
 
+@method_decorator(login_required, name='dispatch')
 class ProfileSettingsView(View):
     def get(self, request):
         return render(request, 'user/settings.html')
 
 
+@method_decorator(login_required, name='dispatch')
 class UpdateAvatarView(View):
     def post(self, request):
         user = get_object_or_404(models.User, username=request.user)
@@ -81,7 +86,7 @@ class UpdateAvatarView(View):
             return render(request, 'user/settings.html', {'bad_avatar':error})
 
 
-
+@method_decorator(login_required, name='dispatch')
 class UpdatePasswordView(View):
     def post(self, request):
         user = get_object_or_404(models.User, username=request.user)
