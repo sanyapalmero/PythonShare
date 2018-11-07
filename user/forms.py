@@ -23,8 +23,10 @@ class CreateUserForm(forms.Form):
 
     def clean(self):
         cleaned_data = super().clean()
-        password = self.cleaned_data['password']
-        repeat_password = self.cleaned_data['repeat_password']
+        #password = self.cleaned_data['password']
+        password = self.data.get('password')
+        #repeat_password = self.cleaned_data['repeat_password']
+        repeat_password = self.data.get('repeat_password')
         if password != repeat_password:
             error = 'Пароли не совпадают!'
             self.add_error('password', error)
