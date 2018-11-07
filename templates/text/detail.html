@@ -61,6 +61,9 @@
             <input id="comment-field" type="text" name="comment" class="form-control" style="display: inline-block; width: 80%;">
             <input type="hidden" name="reply_to" id="reply_to" value="">
             <input class="btn btn-primary" type="submit" value="Отправить" style="display: inline-block;">
+            {% for error in form.comment.errors %}
+                <p class="text-danger">{{ error }}</p>
+            {% endfor %}
         </form>
     </div>
     <style>

@@ -7,5 +7,12 @@ class TextForm(forms.Form):
             'class': 'form-control',
             'style': 'height:200px'
         }),
-        label="Создание текстового документа",
         max_length=100)
+
+class AddCommentForm(forms.Form):
+    comment = forms.CharField()
+
+    def clean_comment(self):
+        comment = self.cleaned_data['comment']
+        if comment:
+            return comment

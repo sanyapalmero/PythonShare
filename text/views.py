@@ -137,16 +137,27 @@ class AllCodeView(View):
 
 class CreateCommentView(View):
     def post(self, request, text_id):
-        comment = request.POST['comment']
-        reply_to_id = request.POST['reply_to']
         text_obj = get_object_or_404(models.Text, id=text_id)
-        comm_obj = models.Comment(commentary=comment, user=request.user, text=text_obj)
-        if reply_to_id:
-            reply_comment = get_object_or_404(models.Comment, id=reply_to_id)
-            comm_obj.reply_to = reply_comment
-        comm_obj.save()
-        return redirect('text:detail', text_id=text_obj.id)
-
+        form = forms.AddCommentForm(request.POST)
+        if form.is_valid():
+            comment = request.POST['comment']
+            reply_to_id = request.POST['reply_to']
+            comm_obj = models.Comment(commentary=comment, user=request.user, text=text_obj)
+            if reply_to_id:
+                reply_comment = get_object_or_404(models.Comment, id=reply_to_id)
+                comm_obj.reply_to = reply_comment
+            comm_obj.save()
+            return redirect('text:detail', text_id=text_obj.id)
+        else:
+            text = get_object_or_404(models.Text, id=text_id)
+            tags = models.Tag.objects.filter(text = text)
+            comments = models.Comment.objects.filter(text = text)
+            return render(request, 'text/detail.html', {
+                'text': text,
+                'tags': tags,
+                'comments': comments,
+                'form':form
+                })
 
 class UpdateCommentView(View):
     def post(self, request, comment_id, text_id):
