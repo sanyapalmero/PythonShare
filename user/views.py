@@ -18,12 +18,15 @@ class CreateView(View):
         return render(request, 'user/register.html', {'form': form})
 
     def post(self, request):
-        form = forms.CreateUserForm(request.POST, request.FILES)
+        form = forms.CreateUserForm(request.POST)
         if form.is_valid():
             username = form.cleaned_data['username']
             password = form.cleaned_data['password']
             repeat_password = form.cleaned_data['repeat_password']
-            avatar = form.cleaned_data['avatar']
+            try:
+                avatar = request.FILES['avatar']
+            except KeyError:
+                avatar = "default.png"
             user = models.User.objects.create_user(username, password, avatar)
             good = 'Вы успешно зарегистрированы!'
             return render(request, 'user/register.html', {
