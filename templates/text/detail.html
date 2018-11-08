@@ -55,6 +55,7 @@
 <div class="comments form-group">
     <div class="add-comment form-group" id="add-comment">
         <label>Комментарии</label>
+        {% if request.user.is_authenticated %}
         <form action="{% url 'text:addcomment' text.id %}" method="post">
             {% csrf_token %}
             <img src="{{request.user.avatar.url}}" style="width:60px; height:60px; border-radius: 60px; border: 2px solid #228f9a; display: inline-block;">
@@ -65,6 +66,7 @@
                 <p class="text-danger">{{ error }}</p>
             {% endfor %}
         </form>
+        {% endif %}
     </div>
     <style>
         .comment {border-radius: 10px; border: 1px solid #228f9a; overflow: hidden; padding: 5px}

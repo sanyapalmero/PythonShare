@@ -36,7 +36,6 @@ class CreateView(View):
         return redirect('text:detail', text_id=text_obj.id)
 
 
-@method_decorator(login_required, name='dispatch')
 class DetailView(View):
     def get(self, request, text_id):
         text = get_object_or_404(models.Text, id=text_id)
@@ -48,6 +47,7 @@ class DetailView(View):
             'comments': comments
             })
 
+    @login_required
     def post(self, request, text_id):
         text = get_object_or_404(models.Text, id=text_id)
         tags = models.Tag.objects.filter(text = text)
