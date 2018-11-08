@@ -2,30 +2,43 @@
 <!DOCTYPE html>
 <head>
     <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial scale=1.0" />
     <title>
         {% block title %}
         {% endblock %}
     </title>
     <link rel="icon" type="image/png" href="{% static "logo.png" %}" />
+    <script src="{% static "/bootstrap/js/jquery.js" %}"></script>
     <link rel="stylesheet" href="{% static "/bootstrap/css/bootstrap.min.css" %}"/>
     <script src="{% static "/bootstrap/js/bootstrap.min.js" %}"></script>
-    <script src="{% static "/bootstrap/js/jquery.js" %}"></script>
     <script src="{% static "ace/ace.js" %} "></script>
     <script src="{% static "selectize/js/standalone/selectize.js" %}"></script>
     <link rel="stylesheet" href="{% static "selectize/css/selectize.css" %}">
     <link rel="stylesheet" href="{% static "selectize/css/selectize.default.css" %}">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css" integrity="sha384-5sAR7xN1Nv6T6+dT2mhtzEpVJvfS3NScPQTrOxhwjIuvcA67KV2R5Jz6kr4abQsz" crossorigin="anonymous">
+    <style>
+    @media only screen and (max-width:768px){
+        .container-fluid{
+            text-align: center;
+        }
+    }
+    </style>
 </head>
 <body>
     <div style="border:none; border-radius: 0;"  class="navbar navbar-default" role="navigation">
-        <div class="container">
+        <div class="container-fluid">
             <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-main">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
                 <a style="margin-top:-4px" class="navbar-brand" href="{% url 'text:index' %}">
                     <img style="display:inline-block" src="/static/logo.png">
                     <p style="display:inline-block">PythonShare</p>
                 </a>
             </div>
-            <div class="collapse navbar-collapse">
+            <div class="collapse navbar-collapse" id="navbar-main">
                 <ul class="nav navbar-nav">
                     {% if request.user.is_authenticated %}
                         <li><a href="{% url 'text:index' %}">Главная</a></li>
