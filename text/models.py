@@ -6,7 +6,7 @@ from user.models import User
 
 
 class Text(models.Model):
-    text = models.CharField(max_length=100)
+    text = models.CharField(max_length=10000)
     user = models.ForeignKey(
         User, null=True, blank=True, on_delete=models.CASCADE)
     date_creation = models.DateTimeField(default=timezone.now, blank=False)

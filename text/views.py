@@ -8,6 +8,7 @@ from . import forms
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from django.utils import timezone
+from django.db.utils import DataError
 
 ENTRIES_COUNT = 20
 
@@ -83,7 +84,11 @@ class EditView(View):
             text.text = request.POST['textfield']
             text.topic = request.POST['topic']
             text.date_last_change = timezone.now()
-            text.save()
+            try:
+                text.save()
+            except DataError:
+                error = 'Превышен лимит количества символов!'
+                return render(request, 'text/edit.html', {'text': text,'error':error})
             tags = request.POST['tags']
             list_tags = tags.split(',')
             for tag in list_tags:

@@ -4,6 +4,9 @@
 
 {% block content %}
 <label for="text">Изменить код:</label>
+{% if error %}
+<p style="color:red">{{ error }}</p>
+{% endif %}
 <style type="text/css" media="screen">
     #editor {
         height: 400px;/*высота редактора*/
