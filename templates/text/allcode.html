@@ -4,30 +4,32 @@
 
 {% block content %}
 <p style="text-align:center; font-weight:bold">Все темы</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>Тема</th>
-            <th>Код</th>
-            <th>Дата создания</th>
-            <th>Дата изменения</th>
-            <th>Автор</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for code in codes %}
+<div class="table-responsive">
+    <table class="table">
+        <thead>
             <tr>
-                <td>{{ code.topic }}</td>
-                <td>
-                    <a href="{% url 'text:detail' code.id %}">{{ code.text|truncatewords:3 }}</a>
-                </td>
-                <td>{{ code.date_creation }}</td>
-                <td>{{ code.date_last_change }}</td>
-                <td>{{ code.user }}</td>
+                <th>Тема</th>
+                <th>Код</th>
+                <th>Дата создания</th>
+                <th>Дата изменения</th>
+                <th>Автор</th>
             </tr>
-        {% endfor %}
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            {% for code in codes %}
+                <tr>
+                    <td>{{ code.topic }}</td>
+                    <td>
+                        <a href="{% url 'text:detail' code.id %}">{{ code.text|truncatewords:3 }}</a>
+                    </td>
+                    <td>{{ code.date_creation }}</td>
+                    <td>{{ code.date_last_change }}</td>
+                    <td>{{ code.user }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
 <ul class="pagination">
     {% for i in codes.paginator.page_range %}
         <li {% if codes.number == i %}class="active"{% endif %}><a href="?page={{ i }}">{{ i }}</a></li>
