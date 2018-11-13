@@ -58,7 +58,7 @@
         {% if request.user.is_authenticated %}
         <form action="{% url 'text:addcomment' text.id %}" method="post">
             {% csrf_token %}
-            <img src="{{request.user.avatar.url}}" style="width:60px; height:60px; border-radius: 60px; border: 2px solid #228f9a; display: inline-block;">
+            <img src="{{request.user.avatar_or_default_url}}" style="width:60px; height:60px; border-radius: 60px; border: 2px solid #228f9a; display: inline-block;">
             <input id="comment-field" type="text" name="comment" class="form-control" style="display: inline-block; width: 80%;">
             <input type="hidden" name="reply_to" id="reply_to" value="">
             <input class="btn btn-primary" type="submit" value="Отправить" style="display: inline-block;">
@@ -91,7 +91,7 @@
         {% for comment in comments %}
         <div class="comment form-group" id="com{{comment.id}}">
             <div class="avatar">
-                <img src="{{comment.user.avatar.url}}">
+                <img src="{{comment.user.avatar_or_default_url}}">
             </div>
             <div class="name-comment">
                 <div class="name">

@@ -39,6 +39,14 @@ class User(AbstractBaseUser):
     avatar = models.FileField(null=True, upload_to='')
 
     @property
+    def avatar_or_default_url(self):
+        if not self.avatar:
+            default_url = "/static/default.png"
+            return default_url
+        else:
+            return self.avatar.url
+
+    @property
     def is_superuser(self):
         return self.role == self.ROLE_ADMIN
 

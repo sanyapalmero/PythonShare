@@ -23,10 +23,7 @@ class CreateView(View):
             username = form.cleaned_data['username']
             password = form.cleaned_data['password']
             repeat_password = form.cleaned_data['repeat_password']
-            try:
-                avatar = request.FILES['avatar']
-            except KeyError:
-                avatar = "default.png"
+            avatar = request.FILES.get('avatar')
             user = models.User.objects.create_user(username, password, avatar)
             good = 'Вы успешно зарегистрированы!'
             return render(request, 'user/login.html', {'good': good})
