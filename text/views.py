@@ -9,8 +9,25 @@ from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from django.utils import timezone
 from django.db.utils import DataError
+import logging
+
+logger = logging.getLogger(__name__)
 
 ENTRIES_COUNT = 20
+
+
+def get_client_ip(request):
+    x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+    if x_forwarded_for:
+        ip = x_forwarded_for.split(',')[0]
+    else:
+        ip = request.META.get('REMOTE_ADDR')
+    return ip
+
+
+def add_log_entry(request, user, message):
+    ip = get_client_ip(request)
+    logger.error(f"| User: {user} | IP:{ip} | Message: {message}")
 
 
 class IndexView(View):
@@ -73,6 +90,7 @@ class EditView(View):
                 'form': form
             })
         else:
+            add_log_entry(request, request.user, f"GET Попытка изменения кода с id={text.id}")
             return HttpResponseForbidden()
 
     def post(self, request, text_id):
@@ -88,6 +106,7 @@ class EditView(View):
                 text.save()
             except DataError:
                 error = 'Превышен лимит количества символов!'
+                add_log_entry(request, request.user, "Превышен лимит количества символов")
                 return render(request, 'text/edit.html', {'text': text,'error':error})
             tags = request.POST['tags']
             list_tags = tags.split(',')
@@ -96,6 +115,7 @@ class EditView(View):
                 tag_obj.save()
             return redirect('text:detail', text_id=text.id)
         else:
+            add_log_entry(request, request.user, f"POST Попытка изменения кода с id={text.id}")
             return HttpResponseForbidden()
 
 
@@ -119,6 +139,7 @@ class DeleteView(TemplateView):
             text.delete()
             return HttpResponseRedirect(return_url)
         else:
+            add_log_entry(request, request.user, f"POST Попытка удаления кода с id={text.id}")
             return HttpResponseForbidden()
 
 
@@ -172,6 +193,7 @@ class UpdateCommentView(View):
             comm.save()
             return redirect('text:detail', text_id=text_id)
         else:
+            add_log_entry(request, request.user, f"POST Попытка изменения комментария с id={comm.id}")
             return HttpResponseForbidden()
 
 class DeleteCommentView(View):
@@ -181,4 +203,5 @@ class DeleteCommentView(View):
             comm.delete()
             return redirect('text:detail', text_id=text_id)
         else:
+            add_log_entry(request, request.user, f"POST Попытка удаления комментария с id={comm.id}")
             return HttpResponseForbidden()

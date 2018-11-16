@@ -5,6 +5,7 @@ from django.http import HttpResponse
 from . import models
 from django.contrib.auth import authenticate, login, logout
 from text.models import Text
+from text.views import add_log_entry
 from django.core.paginator import Paginator
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
@@ -44,6 +45,7 @@ class LoginView(View):
             return redirect('text:index')
         else:
             bad = 'Неверное имя пользователя или пароль'
+            add_log_entry(request, request.user, "Попытка авторизации. Неверное имя пользователя или пароль.")
             return render(request, 'user/login.html', {'bad': bad})
 
 
@@ -93,7 +95,9 @@ class UpdatePasswordView(View):
             user.set_password(new_password)
             user.save()
             good = "Пароль успешно был изменен, авторизуйтесь снова."
+            add_log_entry(request, request.user, "Успешное изменение пароля")
             return render(request, 'user/login.html', {'good_pass': good})
         else:
             error = "Пароли не совпадают!"
+            add_log_entry(request, request.user, "Попытка изменения пароля: пароли не совпадают")
             return render(request, 'user/settings.html', {'bad_pass': error})
