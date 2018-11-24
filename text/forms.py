@@ -2,12 +2,14 @@ from django import forms
 
 
 class TextForm(forms.Form):
-    textfield = forms.CharField(
-        widget=forms.Textarea(attrs={
-            'class': 'form-control',
-            'style': 'height:200px'
-        }),
-        max_length=100)
+    textfield = forms.CharField()
+    topic = forms.CharField()
+
+    def clean(self):
+        cleaned_data = super().clean()
+        topic = self.data.get('topic')
+        textfield = self.data.get('textfield')
+        return cleaned_data
 
 class AddCommentForm(forms.Form):
     comment = forms.CharField()

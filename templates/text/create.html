@@ -12,12 +12,18 @@
         {% csrf_token %}
         <label>Тема</label>
         <div class="form-group">
-            <input class="form-control" type="text" name="topic" required>
+            <input class="form-control" type="text" name="topic" value="{{ form.topic.value|default_if_none:'' }}">
+            {% for error in form.topic.errors %}
+                <p class="text-danger">{{ error }}</p>
+            {% endfor %}
         </div>
         <label>Код</label>
         <pre id="editor"></pre>
         <div class="ace-editor editor-control"></div>
         <input type="hidden" name="textfield" id="textfield" value="">
+        {% for error in form.textfield.errors %}
+            <p class="text-danger">{{ error }}</p>
+        {% endfor %}
         <label>Теги</label>
         <div class="form-group">
             <input id="input-tags" name="tags">

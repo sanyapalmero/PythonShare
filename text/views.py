@@ -42,16 +42,21 @@ class CreateView(View):
         return render(request, 'text/create.html', {'form': form})
 
     def post(self, request):
-        text_post = request.POST['textfield']
-        tags = request.POST['tags']
-        topic = request.POST['topic']
-        list_tags = tags.split(',')
-        text_obj = models.Text(text=text_post, user=request.user, topic=topic)
-        text_obj.save()
-        for tag in list_tags:
-            tag_obj = models.Tag(tag = tag, text=text_obj)
-            tag_obj.save()
-        return redirect('text:detail', text_id=text_obj.id)
+        form = forms.TextForm(request.POST)
+        if form.is_valid():
+            text_post = request.POST['textfield']
+            tags = request.POST['tags']
+            topic = request.POST['topic']
+            list_tags = tags.split(',')
+            text_obj = models.Text(text=text_post, user=request.user, topic=topic)
+            text_obj.save()
+            for tag in list_tags:
+                tag_obj = models.Tag(tag = tag, text=text_obj)
+                tag_obj.save()
+            return redirect('text:detail', text_id=text_obj.id)
+        else:
+            return render(request, 'text/create.html', {'form': form})
+
 
 
 class DetailView(View):
@@ -62,19 +67,6 @@ class DetailView(View):
         return render(request, 'text/detail.html', {
             'text': text,
             'tags': tags,
-            'comments': comments
-            })
-
-    @login_required
-    def post(self, request, text_id):
-        text = get_object_or_404(models.Text, id=text_id)
-        tags = models.Tag.objects.filter(text = text)
-        comments = models.Comment.objects.filter(text = text)
-        return_url = request.POST['return_url']
-        return render(request, 'text/detail.html', {
-            'text': text,
-            'tags': tags,
-            'url': return_url,
             'comments': comments
             })
 
