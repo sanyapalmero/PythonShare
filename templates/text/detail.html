@@ -29,7 +29,7 @@
         Теги:
         {% for tag in tags %}
             {% if tag.tag != '' %}
-                <a href="{%url 'text:search' tag.tag %}">{{ tag.tag }}</a>
+                <a href="{%url 'code:search' tag.tag %}">{{ tag.tag }}</a>
             {% endif %}
         {% endfor %}
     </p>
@@ -37,16 +37,16 @@
     <span style="color:rgb(115, 165, 206)">
         <i class="fas fa-file"></i>
     </span>
-    <a href="{% url 'text:create' %}">Создать новый</a> |
+    <a href="{% url 'code:create' %}">Создать новый</a> |
         {% if text.user_id == request.user.id %}
             <span style="color:rgb(115, 165, 206)">
                 <i class="fas fa-edit"></i>
             </span>
-            <a href="{% url 'text:edit' text.id %}">Изменить</a> |
+            <a href="{% url 'code:edit' text.id %}">Изменить</a> |
             <span style="color:rgb(115, 165, 206)">
                 <i class="fas fa-trash-alt"></i>
             </span>
-            <a href="{% url 'text:delete' text.id %}{{ url }}">Удалить</a>
+            <a href="{% url 'code:delete' text.id %}{{ url }}">Удалить</a>
         {% endif %}
     {% else %}
         <p class="text-danger">Авторизуйтесь, чтобы добавлять/изменять тексты</p>
@@ -56,7 +56,7 @@
     <div class="add-comment form-group" id="add-comment">
         <label>Комментарии</label>
         {% if request.user.is_authenticated %}
-        <form action="{% url 'text:addcomment' text.id %}" method="post">
+        <form action="{% url 'code:addcomment' text.id %}" method="post">
             {% csrf_token %}
             <img src="{{request.user.avatar_or_default_url}}" style="width:60px; height:60px; border-radius: 60px; border: 2px solid #228f9a; display: inline-block;">
             <input id="comment-field" type="text" name="comment" class="form-control" style="display: inline-block; width: 80%;">
@@ -106,7 +106,7 @@
                     <a style="color:#228f9a" href="#add-comment" onclick="reply($(this).closest('div').attr('id'))">Ответить</a>
                 </div>
                 <div class="edit-comm" id="{{comment.id}}editcomment" data-comment-id="{{comment.id}}" style="display:none">
-                    <form action="{% url 'text:updcomment' comment.id text.id %}" method="post">
+                    <form action="{% url 'code:updcomment' comment.id text.id %}" method="post">
                         {% csrf_token %}
                         <input type="text" value="{{comment.comment}}" name="comment" class="form-control" style="width:500px; display:inline-block">
                         <input type="submit" value="Сохранить" class="btn btn-primary" style="display:inline-block">
@@ -119,7 +119,7 @@
             </div>
             <div class="buttons" id="{{comment.id}}edit" data-comment-id="{{comment.id}}">
                 {% if request.user == comment.user %}
-                <form action="{% url 'text:delcomment' comment.id text.id %}" method="post">
+                <form action="{% url 'code:delcomment' comment.id text.id %}" method="post">
                     {% csrf_token %}
                     <input type="submit" value="Удалить" class="btn btn-danger btn-sm" style="float: right; margin-right: 30px;">
                     <input type="button" onclick="showinput($(this).closest('div').attr('id'))" value="Изменить" class="btn btn-primary btn-sm" style="float: right; margin-right: 5px;">

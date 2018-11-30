@@ -13,7 +13,7 @@
     }
 </style>
 <input id="code" type="hidden" value="{{ text.text }}">
-<form action="{% url 'text:edit' text.id %}" method="post">
+<form action="{% url 'code:edit' text.id %}" method="post">
     {% csrf_token %}
     <label>Тема</label>
     <div class="form-group">

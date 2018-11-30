@@ -33,7 +33,7 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a style="margin-top:-4px" class="navbar-brand" href="{% url 'text:index' %}">
+                <a style="margin-top:-4px" class="navbar-brand" href="{% url 'code:index' %}">
                     <img style="display:inline-block" src="/static/logo.png">
                     <p style="display:inline-block">PythonShare</p>
                 </a>
@@ -41,13 +41,13 @@
             <div class="collapse navbar-collapse" id="navbar-main">
                 <ul class="nav navbar-nav">
                     {% if request.user.is_authenticated %}
-                        <li><a href="{% url 'text:index' %}">Главная</a></li>
-                        <li><a href="{% url 'text:create' %}">Создать</a></li>
-                        <li><a href="{% url 'text:all' %}">Темы</a></li>
+                        <li><a href="{% url 'code:index' %}">Главная</a></li>
+                        <li><a href="{% url 'code:create' %}">Создать</a></li>
+                        <li><a href="{% url 'code:all' %}">Темы</a></li>
                         <li><a href="{% url 'user:profile' %}">Профиль</a></li>
                     {% else %}
-                        <li><a href="{% url 'text:index' %}">Главная</a></li>
-                        <li><a href="{% url 'text:all' %}">Темы</a></li>
+                        <li><a href="{% url 'code:index' %}">Главная</a></li>
+                        <li><a href="{% url 'code:all' %}">Темы</a></li>
                     {% endif %}
                 </ul>
                 <ul class="nav navbar-nav navbar-right">

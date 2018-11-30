@@ -8,7 +8,7 @@
             height: 400px;/*высота редактора*/
         }
     </style>
-    <form action="{% url 'text:create' %}" method="post">
+    <form action="{% url 'code:create' %}" method="post">
         {% csrf_token %}
         <label>Тема</label>
         <div class="form-group">
