@@ -75,16 +75,16 @@ class ProfileSettingsView(View):
 class UpdateAvatarView(View):
     def post(self, request):
         user = get_object_or_404(models.User, username=request.user)
-        try:
-            avatar = request.FILES['avatar']
+        avatar = request.FILES.get('avatar')
+        if not avatar:
+            error = "Файл не выбран"
+            return render(request, 'user/settings.html', {'bad_avatar':error})
+        else:
             user.avatar = avatar
             user.save()
             return redirect('user:profile')
-        except KeyError:
-            error = "Ошибка при загрузке аватара"
-            return render(request, 'user/settings.html', {'bad_avatar':error})
 
-
+            
 @method_decorator(login_required, name='dispatch')
 class UpdatePasswordView(View):
     def post(self, request):
