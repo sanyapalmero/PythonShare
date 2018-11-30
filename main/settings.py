@@ -29,7 +29,7 @@ ALLOWED_HOSTS = ['*']
 # Application definition
 
 INSTALLED_APPS = [
-    'text',
+    'code',
     'user',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -156,7 +156,7 @@ LOGGING = {
             'level': 'ERROR',
             'propagate': True,
         },
-        'text': {
+        'code': {
             'handlers': ['file'],
             'level': 'DEBUG',
             'propagate': True,

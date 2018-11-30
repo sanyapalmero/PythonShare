@@ -10,7 +10,7 @@ class Migration(migrations.Migration):
 
     dependencies = [
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
-        ('text', '0003_auto_20181011_1908'),
+        ('code', '0003_auto_20181011_1908'),
     ]
 
     operations = [
@@ -20,7 +20,7 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('comment', models.CharField(db_index=True, max_length=500)),
                 ('date_creation', models.DateTimeField(default=django.utils.timezone.now)),
-                ('text', models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, to='text.Text')),
+                ('text', models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, to='code.Text')),
                 ('user', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
             ],
         ),
