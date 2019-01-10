@@ -46,7 +46,9 @@ class LoginView(View):
             return redirect('code:index')
         else:
             bad = 'Неверное имя пользователя или пароль'
-            add_log_entry(request, request.user, "Попытка авторизации. Неверное имя пользователя или пароль.")
+            add_log_entry(
+                request, request.user,
+                "Попытка авторизации. Неверное имя пользователя или пароль.")
             return render(request, 'user/login.html', {'bad': bad})
 
 
@@ -63,7 +65,10 @@ class ProfileView(View):
         paginator = Paginator(user_codes, ENTRIES_COUNT)
         page = request.GET.get('page')
         codes = paginator.get_page(page)
-        return render(request, 'user/profile.html', {'codes': codes, 'all': user_codes})
+        return render(request, 'user/profile.html', {
+            'codes': codes,
+            'all': user_codes
+        })
 
 
 @method_decorator(login_required, name='dispatch')
@@ -79,13 +84,13 @@ class UpdateAvatarView(View):
         avatar = request.FILES.get('avatar')
         if not avatar:
             error = "Файл не выбран"
-            return render(request, 'user/settings.html', {'bad_avatar':error})
+            return render(request, 'user/settings.html', {'bad_avatar': error})
         else:
             user.avatar = avatar
             user.save()
             return redirect('user:profile')
 
-            
+
 @method_decorator(login_required, name='dispatch')
 class UpdatePasswordView(View):
     def post(self, request):
@@ -100,5 +105,6 @@ class UpdatePasswordView(View):
             return render(request, 'user/login.html', {'good_pass': good})
         else:
             error = "Пароли не совпадают!"
-            add_log_entry(request, request.user, "Попытка изменения пароля: пароли не совпадают")
+            add_log_entry(request, request.user,
+                          "Попытка изменения пароля: пароли не совпадают")
             return render(request, 'user/settings.html', {'bad_pass': error})

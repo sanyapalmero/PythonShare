@@ -11,6 +11,7 @@ class CodeForm(forms.Form):
         textfield = self.data.get('textfield')
         return cleaned_data
 
+
 class AddCommentForm(forms.Form):
     comment = forms.CharField()
 

@@ -37,7 +37,7 @@ class IndexView(View):
         return render(request, 'code/index.html')
 
 
-# Класс Сreate 
+# Класс Сreate
 @method_decorator(login_required, name='dispatch')
 class CreateView(View):
     # метод get, возвращающий страницу create.html
@@ -45,7 +45,7 @@ class CreateView(View):
         form = forms.CodeForm()
         return render(request, 'code/create.html', {'form': form})
 
-    # метод post, отвечающий за добавление кода 
+    # метод post, отвечающий за добавление кода
     def post(self, request):
         form = forms.CodeForm(request.POST)
         if form.is_valid():
@@ -65,7 +65,7 @@ class CreateView(View):
 
 # Класс Detail
 class DetailView(View):
-    # метод get, возвращающий страницу просмотра кода 
+    # метод get, возвращающий страницу просмотра кода
     def get(self, request, code_id):
         code = get_object_or_404(models.Code, id=code_id)
         tags = models.Tag.objects.filter(code = code)
@@ -156,7 +156,7 @@ class SearchByTagView(TemplateView):
         codes = models.Tag.objects.filter(tag = tag)
         return {'texts': codes, 'tag': tag}
 
-#####################################   
+#####################################
 # Классы для работы с комментариями #
 #####################################
 class AllCodeView(View):

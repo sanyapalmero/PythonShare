@@ -7,7 +7,6 @@ class CreateUserForm(forms.Form):
     username = forms.CharField(label="Имя пользователя", max_length=20)
     password = forms.CharField(label="Пароль", max_length=128)
     repeat_password = forms.CharField(label="Повторите пароль", max_length=128)
-    #avatar = forms.FileField()
 
     def clean_username(self):
         username = self.cleaned_data['username']
@@ -20,9 +19,7 @@ class CreateUserForm(forms.Form):
 
     def clean(self):
         cleaned_data = super().clean()
-        #password = self.cleaned_data['password']
         password = self.data.get('password')
-        #repeat_password = self.cleaned_data['repeat_password']
         repeat_password = self.data.get('repeat_password')
         if password != repeat_password:
             error = 'Пароли не совпадают!'
