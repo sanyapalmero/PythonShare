@@ -7,7 +7,7 @@ from django.utils import timezone
 
 
 class Code(models.Model):
-    code = models.CharField(max_length=10000)
+    code = models.TextField()
     user = models.ForeignKey(
         User, null=True, blank=True, on_delete=models.CASCADE)
     date_creation = models.DateTimeField(default=timezone.now, blank=False)
