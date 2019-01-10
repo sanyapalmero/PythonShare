@@ -1,5 +1,6 @@
 from django.contrib import admin
-from .models import Code, Tag, Comment
+
+from .models import Code, Comment, Tag
 
 
 @admin.register(Code)

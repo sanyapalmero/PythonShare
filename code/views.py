@@ -1,15 +1,16 @@
-from django.shortcuts import render, redirect, get_object_or_404
-from django.http import HttpResponseForbidden, HttpResponseRedirect
-from django.views.generic import TemplateView
-from django.views import View
-from . import models
-from django.core.paginator import Paginator
-from . import forms
-from django.contrib.auth.decorators import login_required
-from django.utils.decorators import method_decorator
-from django.utils import timezone
-from django.db.utils import DataError
 import logging
+
+from django.contrib.auth.decorators import login_required
+from django.core.paginator import Paginator
+from django.db.utils import DataError
+from django.http import HttpResponseForbidden, HttpResponseRedirect
+from django.shortcuts import get_object_or_404, redirect, render
+from django.utils import timezone
+from django.utils.decorators import method_decorator
+from django.views import View
+from django.views.generic import TemplateView
+
+from . import forms, models
 
 logger = logging.getLogger(__name__)
 

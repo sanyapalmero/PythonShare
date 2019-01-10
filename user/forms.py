@@ -1,4 +1,5 @@
 from django import forms
+
 from . import models
 
 
@@ -34,4 +35,3 @@ class CreateUserForm(forms.Form):
 class LoginUserForm(forms.Form):
     username = forms.CharField(label="Ваше имя", max_length=20)
     password = forms.CharField(label="Пароль", max_length=128)
-
