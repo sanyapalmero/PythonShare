@@ -12,7 +12,7 @@
         height: 400px;/*высота редактора*/
     }
 </style>
-<input id="code" type="hidden" value="{{ text.text }}">
+<input id="code" type="hidden" value="{{ text.code }}">
 <form action="{% url 'code:edit' text.id %}" method="post">
     {% csrf_token %}
     <label>Тема</label>

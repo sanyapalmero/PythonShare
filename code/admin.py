@@ -1,10 +1,10 @@
 from django.contrib import admin
-from .models import Text, Tag, Comment
+from .models import Code, Tag, Comment
 
 
-@admin.register(Text)
-class TextAdmin(admin.ModelAdmin):
-    list_display = ('id', 'short_text', 'get_user', 'date_creation',
+@admin.register(Code)
+class CodeAdmin(admin.ModelAdmin):
+    list_display = ('id', 'short_code', 'get_user', 'date_creation',
                     'date_last_change')
 
 
@@ -15,4 +15,4 @@ class TagAdmin(admin.ModelAdmin):
 
 @admin.register(Comment)
 class CommentAdmin(admin.ModelAdmin):
-    list_display = ('id', 'commentary', 'user', 'text')
+    list_display = ('id', 'commentary', 'user', 'code')

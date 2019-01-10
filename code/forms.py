@@ -1,7 +1,7 @@
 from django import forms
 
 
-class TextForm(forms.Form):
+class CodeForm(forms.Form):
     textfield = forms.CharField()
     topic = forms.CharField()
 

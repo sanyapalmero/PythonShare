@@ -15,7 +15,7 @@
 <div>
     {% for code in texts %}
         <p style="display: inline-block;">Тема: {{ code.text.topic }} |</p>
-        <a style="display: inline-block;"href="{% url 'code:detail' code.text.id %}">Перейти</a><br>
+        <a style="display: inline-block;"href="{% url 'code:detail' code.code.id %}">Перейти</a><br>
     {% endfor %}
 </div>
 

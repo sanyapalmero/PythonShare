@@ -4,7 +4,7 @@ from . import forms
 from django.http import HttpResponse
 from . import models
 from django.contrib.auth import authenticate, login, logout
-from code.models import Text
+from code.models import Code
 from code.views import add_log_entry
 from django.core.paginator import Paginator
 from django.contrib.auth.decorators import login_required
@@ -42,7 +42,7 @@ class LoginView(View):
         user = authenticate(request, username=username, password=password)
         if user is not None:
             login(request, user)
-            return redirect('text:index')
+            return redirect('code:index')
         else:
             bad = 'Неверное имя пользователя или пароль'
             add_log_entry(request, request.user, "Попытка авторизации. Неверное имя пользователя или пароль.")
@@ -52,13 +52,13 @@ class LoginView(View):
 class LogOutView(View):
     def get(self, request):
         logout(request)
-        return redirect('text:index')
+        return redirect('code:index')
 
 
 @method_decorator(login_required, name='dispatch')
 class ProfileView(View):
     def get(self, request):
-        user_codes = Text.objects.filter(user=request.user)
+        user_codes = Code.objects.filter(user=request.user)
         paginator = Paginator(user_codes, ENTRIES_COUNT)
         page = request.GET.get('page')
         codes = paginator.get_page(page)
