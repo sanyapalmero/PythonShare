@@ -48,6 +48,7 @@ class CreateView(View):
     # метод post, отвечающий за добавление кода
     def post(self, request):
         form = forms.CodeForm(request.POST)
+
         if form.is_valid():
             code = request.POST['textfield']
             tags = request.POST['tags']
@@ -55,9 +56,11 @@ class CreateView(View):
             list_tags = tags.split(',')
             code_obj = models.Code(code=code, user=request.user, topic=topic)
             code_obj.save()
+
             for tag in list_tags:
                 tag_obj = models.Tag(tag = tag, code=code_obj)
                 tag_obj.save()
+
             return redirect('code:detail', code_id=code_obj.id)
         else:
             return render(request, 'code/create.html', {'form': form})
@@ -96,23 +99,29 @@ class EditView(View):
     def post(self, request, code_id):
         code = get_object_or_404(models.Code, id=code_id)
         tags_obj = models.Tag.objects.filter(code=code_id)
+
         for obj in tags_obj: # удаление всех тегов, привязанных к коду
             obj.delete()
+
         if request.user == code.user:
             code.code = request.POST['textfield']
             code.topic = request.POST['topic']
             code.date_last_change = timezone.now()
+
             try:
                 code.save()
             except DataError:
                 error = 'Превышен лимит количества символов!'
                 add_log_entry(request, request.user, "Превышен лимит количества символов")
                 return render(request, 'code/edit.html', {'text': code,'error':error})
+
             tags = request.POST['tags']
             list_tags = tags.split(',')
+
             for tag in list_tags: # сохранение новых тегов
                 tag_obj = models.Tag(tag = tag, code=code)
                 tag_obj.save()
+
             return redirect('code:detail', code_id=code.id)
         else:
             add_log_entry(request, request.user, f"POST Попытка изменения кода с id={code.id}")
@@ -128,17 +137,22 @@ class DeleteView(TemplateView):
     def get_context_data(self, code_id):
         code = get_object_or_404(models.Code, id=code_id)
         return_url = self.request.GET.get('next')
+
         if return_url == None:
             return_url = "/"
+
         return {'text': code, 'url': return_url} # TODO: return_url сейчас не работает
 
     # метод post, отвечаеющий за удаление кода
     def post(self, request, code_id):
         code = get_object_or_404(models.Code, id=code_id)
+
         if request.user == code.user:
             return_url = request.POST['next']
+
             if return_url == 'None':
                 return_url = "/"
+
             code.delete()
             return HttpResponseRedirect(return_url)
         else:
@@ -172,13 +186,16 @@ class CreateCommentView(View):
     def post(self, request, code_id):
         code_obj = get_object_or_404(models.Code, id=code_id)
         form = forms.AddCommentForm(request.POST)
+
         if form.is_valid():
             comment = request.POST['comment']
             reply_to_id = request.POST['reply_to']
             comm_obj = models.Comment(commentary=comment, user=request.user, code=code_obj)
+
             if reply_to_id:
                 reply_comment = get_object_or_404(models.Comment, id=reply_to_id)
                 comm_obj.reply_to = reply_comment
+
             comm_obj.save()
             return redirect('code:detail', code_id=code_obj.id)
         else:

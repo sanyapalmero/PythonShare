@@ -21,11 +21,13 @@ class CreateView(View):
 
     def post(self, request):
         form = forms.CreateUserForm(request.POST)
+
         if form.is_valid():
             username = form.cleaned_data['username']
             password = form.cleaned_data['password']
             repeat_password = form.cleaned_data['repeat_password']
             avatar = request.FILES.get('avatar')
+
             user = models.User.objects.create_user(username, password, avatar)
             good = 'Вы успешно зарегистрированы!'
             return render(request, 'user/login.html', {'good': good})
@@ -41,6 +43,7 @@ class LoginView(View):
         username = request.POST['username']
         password = request.POST['password']
         user = authenticate(request, username=username, password=password)
+
         if user is not None:
             login(request, user)
             return redirect('code:index')
@@ -82,6 +85,7 @@ class UpdateAvatarView(View):
     def post(self, request):
         user = get_object_or_404(models.User, username=request.user)
         avatar = request.FILES.get('avatar')
+
         if not avatar:
             error = "Файл не выбран"
             return render(request, 'user/settings.html', {'bad_avatar': error})
@@ -97,9 +101,11 @@ class UpdatePasswordView(View):
         user = get_object_or_404(models.User, username=request.user)
         old_password = request.POST['old_password']
         new_password = request.POST['new_password']
+
         if user.check_password(old_password):
             user.set_password(new_password)
             user.save()
+
             good = "Пароль успешно был изменен, авторизуйтесь снова."
             add_log_entry(request, request.user, "Успешное изменение пароля")
             return render(request, 'user/login.html', {'good_pass': good})
