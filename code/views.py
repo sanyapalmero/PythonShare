@@ -34,7 +34,8 @@ def add_log_entry(request, user, message):
 # Класс Index, содержащий get метод, который возвращает страницу index.html
 class IndexView(View):
     def get(self, request):
-        return render(request, 'code/index.html')
+        template_name = 'code/index.html'
+        return render(request, template_name)
 
 
 # Класс Сreate
@@ -42,11 +43,13 @@ class IndexView(View):
 class CreateView(View):
     # метод get, возвращающий страницу create.html
     def get(self, request):
+        template_name = 'code/create.html'
         form = forms.CodeForm()
-        return render(request, 'code/create.html', {'form': form})
+        return render(request, template_name, {'form': form})
 
     # метод post, отвечающий за добавление кода
     def post(self, request):
+        template_name = 'code/create.html'
         form = forms.CodeForm(request.POST)
 
         if form.is_valid():
@@ -63,17 +66,18 @@ class CreateView(View):
 
             return redirect('code:detail', code_id=code_obj.id)
         else:
-            return render(request, 'code/create.html', {'form': form})
+            return render(request, template_name, {'form': form})
 
 
 # Класс Detail
 class DetailView(View):
     # метод get, возвращающий страницу просмотра кода
     def get(self, request, code_id):
+        template_name = 'code/detail.html'
         code = get_object_or_404(models.Code, id=code_id)
         tags = models.Tag.objects.filter(code = code)
         comments = models.Comment.objects.filter(code = code)
-        return render(request, 'code/detail.html', {
+        return render(request, template_name, {
             'text': code,
             'tags': tags,
             'comments': comments
@@ -84,10 +88,11 @@ class DetailView(View):
 class EditView(View):
     # метод get, возвращающий страницу изменения кода
     def get(self, request, code_id):
+        template_name = 'code/edit.html'
         code = get_object_or_404(models.Code, id=code_id)
         if request.user == code.user:
             form = forms.CodeForm()
-            return render(request, 'code/edit.html', {
+            return render(request, template_name, {
                 'text': code,
                 'form': form
             })
@@ -97,6 +102,7 @@ class EditView(View):
 
     # метод post, отвечаеющий за обновление данных модели Сode
     def post(self, request, code_id):
+        template_name = 'code/edit.html'
         code = get_object_or_404(models.Code, id=code_id)
         tags_obj = models.Tag.objects.filter(code=code_id)
 
@@ -113,7 +119,7 @@ class EditView(View):
             except DataError:
                 error = 'Превышен лимит количества символов!'
                 add_log_entry(request, request.user, "Превышен лимит количества символов")
-                return render(request, 'code/edit.html', {'text': code,'error':error})
+                return render(request, template_name, {'text': code,'error':error})
 
             tags = request.POST['tags']
             list_tags = tags.split(',')
@@ -175,15 +181,17 @@ class SearchByTagView(TemplateView):
 #####################################
 class AllCodeView(View):
     def get(self, request):
+        template_name = 'code/allcode.html'
         all_codes = models.Code.objects.all()
         paginator = Paginator(all_codes, ENTRIES_COUNT)
         page = request.GET.get('page')
         codes = paginator.get_page(page)
-        return render(request, 'code/allcode.html', {'codes': codes})
+        return render(request, template_name, {'codes': codes})
 
 
 class CreateCommentView(View):
     def post(self, request, code_id):
+        template_name = 'code/detail.html'
         code_obj = get_object_or_404(models.Code, id=code_id)
         form = forms.AddCommentForm(request.POST)
 
@@ -202,7 +210,7 @@ class CreateCommentView(View):
             code = get_object_or_404(models.Code, id=code_id)
             tags = models.Tag.objects.filter(code = code)
             comments = models.Comment.objects.filter(code = code)
-            return render(request, 'code/detail.html', {
+            return render(request, template_name, {
                 'text': code,
                 'tags': tags,
                 'comments': comments,
