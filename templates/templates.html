@@ -4,8 +4,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial scale=1.0" />
     <title>
-        {% block title %}
-        {% endblock %}
+        {% block title %}{% endblock %}
     </title>
     <link rel="icon" type="image/png" href="{% static "logo.png" %}" />
     <script src="{% static "/bootstrap/js/jquery.js" %}"></script>
@@ -15,14 +14,8 @@
     <script src="{% static "selectize/js/standalone/selectize.js" %}"></script>
     <link rel="stylesheet" href="{% static "selectize/css/selectize.css" %}">
     <link rel="stylesheet" href="{% static "selectize/css/selectize.default.css" %}">
+    <link rel="stylesheet" href="{% static "styles.css" %}">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css" integrity="sha384-5sAR7xN1Nv6T6+dT2mhtzEpVJvfS3NScPQTrOxhwjIuvcA67KV2R5Jz6kr4abQsz" crossorigin="anonymous">
-    <style>
-    @media only screen and (max-width:768px){
-        .container-fluid{
-            text-align: center;
-        }
-    }
-    </style>
 </head>
 <body>
     <div style="border:none; border-radius: 0;"  class="navbar navbar-default" role="navigation">

@@ -7,11 +7,6 @@
 {% if error %}
 <p style="color:red">{{ error }}</p>
 {% endif %}
-<style type="text/css" media="screen">
-    #editor {
-        height: 400px;/*высота редактора*/
-    }
-</style>
 <input id="code" type="hidden" value="{{ text.code }}">
 <form action="{% url 'code:edit' text.id %}" method="post">
     {% csrf_token %}
