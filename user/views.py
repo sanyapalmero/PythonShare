@@ -12,10 +12,10 @@ from django.views import View
 from .forms import CreateUserForm
 from .models import User
 
-ENTRIES_COUNT = 10
-
 
 class CreateView(View):
+    """Страница регистрации"""
+
     def get(self, request):
         template_name = 'user/register.html'
         form = CreateUserForm()
@@ -41,6 +41,8 @@ class CreateView(View):
 
 
 class LoginView(View):
+    """Страница авторизации"""
+
     def get(self, request):
         template_name = 'user/login.html'
         return render(request, template_name)
@@ -70,6 +72,9 @@ class LogOutView(View):
 
 @method_decorator(login_required, name='dispatch')
 class ProfileView(View):
+    """Страница профиля пользователя"""
+    ENTRIES_COUNT = 10
+
     def get(self, request):
         template_name = 'user/profile.html'
         user_codes = Code.objects.filter(user=request.user)
@@ -84,6 +89,8 @@ class ProfileView(View):
 
 @method_decorator(login_required, name='dispatch')
 class ProfileSettingsView(View):
+    """Страница настроек профиля"""
+
     def get(self, request):
         template_name = 'user/settings.html'
         return render(request, template_name)
