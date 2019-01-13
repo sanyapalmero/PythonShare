@@ -28,7 +28,7 @@
         {% for code in codes %}
             <tr>
                 <td>
-                    <a href="{% url 'code:detail' code.id %}">
+                    <a href="{% url 'code:detail' code.id %}?next={{ request.get_full_path|urlencode }}">
                         {{ code.topic }}
                     </a>
                 </td>

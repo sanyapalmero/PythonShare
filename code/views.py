@@ -78,10 +78,16 @@ class DetailView(View):
         code = get_object_or_404(Code, id=code_id)
         tags = Tag.objects.filter(code = code)
         comments = Comment.objects.filter(code = code)
+
+        return_url = self.request.GET.get('next')
+        if return_url == None:
+            return_url = "/"
+
         return render(request, template_name, {
             'code': code,
             'tags': tags,
-            'comments': comments
+            'comments': comments,
+            'url': return_url
             })
 
 # Класс Edit
@@ -142,7 +148,7 @@ class DeleteView(TemplateView):
         if return_url == None:
             return_url = "/"
 
-        return {'code': code, 'url': return_url} # TODO: return_url сейчас не работает
+        return {'code': code, 'url': return_url}
 
     # метод post, отвечаеющий за удаление кода
     def post(self, request, code_id):

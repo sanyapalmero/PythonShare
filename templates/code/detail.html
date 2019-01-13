@@ -41,7 +41,7 @@
             <span style="color:rgb(115, 165, 206)">
                 <i class="fas fa-trash-alt"></i>
             </span>
-            <a href="{% url 'code:delete' code.id %}{{ url }}">Удалить</a>
+            <a href="{% url 'code:delete' code.id %}?next={{ url }}">Удалить</a>
         {% endif %}
     {% else %}
         <p class="text-danger">Авторизуйтесь, чтобы добавлять/изменять тексты</p>
