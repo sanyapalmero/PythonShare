@@ -18,8 +18,8 @@
             </div>
             <input class="btn btn-primary" type="submit" value="Обновить аватар">
         </form>
-        {% if bad_avatar %}
-            <p style="color:red">{{ bad_avatar }}</p>
+        {% if no_file %}
+            <p style="color:red">{{ no_file }}</p>
         {% endif %}
     </div>
     <div class="col-md-4">
@@ -29,8 +29,8 @@
             <div class="form-group">
                 <label>Старый пароль</label>
                 <input style="width:250px;" type="password" class="form-control" name="old_password">
-                {% if bad_pass %}
-                    <p style="color:red">{{ bad_pass }}</p>
+                {% if passwords_not_matched %}
+                    <p style="color:red">{{ passwords_not_matched }}</p>
                 {% endif %}
             </div>
             <div class="form-group">

@@ -33,9 +33,10 @@ class CreateView(View):
             repeat_password = form.cleaned_data['repeat_password']
             avatar = request.FILES.get('avatar')
 
-            user = User.objects.create_user(username, password, avatar)
-            good = 'Вы успешно зарегистрированы!'
-            return render(request, template_name_login, {'good': good})
+            User.objects.create_user(username, password, avatar)
+            success_registration = 'Вы успешно зарегистрированы!'
+            return render(request, template_name_login,
+                          {'success_registration': success_registration})
         else:
             return render(request, template_name_register, {'form': form})
 
@@ -57,11 +58,12 @@ class LoginView(View):
             login(request, user)
             return redirect('code:index')
         else:
-            bad = 'Неверное имя пользователя или пароль'
+            failed_login = 'Неверное имя пользователя или пароль'
             add_log_entry(
                 request, request.user,
                 "Попытка авторизации. Неверное имя пользователя или пароль.")
-            return render(request, template_name, {'bad': bad})
+            return render(request, template_name,
+                          {'failed_login': failed_login})
 
 
 class LogOutView(View):
@@ -104,8 +106,8 @@ class UpdateAvatarView(View):
         avatar = request.FILES.get('avatar')
 
         if not avatar:
-            error = "Файл не выбран"
-            return render(request, template_name, {'bad_avatar': error})
+            no_file = "Файл не выбран"
+            return render(request, template_name, {'no_file': no_file})
         else:
             user.avatar = avatar
             user.save()
@@ -126,11 +128,13 @@ class UpdatePasswordView(View):
             user.set_password(new_password)
             user.save()
 
-            good = "Пароль успешно был изменен, авторизуйтесь снова."
+            success_change = "Пароль успешно был изменен, авторизуйтесь снова."
             add_log_entry(request, request.user, "Успешное изменение пароля")
-            return render(request, template_name_login, {'good_pass': good})
+            return render(request, template_name_login,
+                          {'success_change': success_change})
         else:
-            error = "Пароли не совпадают!"
+            passwords_not_matched = "Пароли не совпадают!"
             add_log_entry(request, request.user,
                           "Попытка изменения пароля: пароли не совпадают")
-            return render(request, template_name_settings, {'bad_pass': error})
+            return render(request, template_name_settings,
+                          {'passwords_not_matched': passwords_not_matched})

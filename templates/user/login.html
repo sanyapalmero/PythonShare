@@ -16,13 +16,13 @@
         </div>
         <input class="btn btn-primary" type="submit" value="Войти">
     </form>
-    {% if good_pass %}
-        <p style="color:green">{{ good_pass }}</p>
+    {% if success_change %}
+        <p style="color:green">{{ success_change }}</p>
     {% endif %}
-    {% if good %}
-        <p style="color:green">{{ good }}</p>
+    {% if success_registration %}
+        <p style="color:green">{{ success_registration }}</p>
     {% endif %}
-    {% if bad %}
-        <p style="color:red">{{ bad }}</p>
+    {% if failed_login %}
+        <p style="color:red">{{ failed_login }}</p>
     {% endif %}
 {% endblock %}
