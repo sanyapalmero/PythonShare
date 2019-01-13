@@ -1,5 +1,5 @@
 from django.apps import AppConfig
 
 
-class TextConfig(AppConfig):
-    name = 'text'
+class CodeConfig(AppConfig):
+    name = 'code'

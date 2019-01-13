@@ -16,8 +16,8 @@
             <label>Код</label>
             <pre id="editor"></pre>
             <div class="ace-editor editor-control"></div>
-            <input type="hidden" name="textfield" id="textfield" value="">
-            {% for error in form.textfield.errors %}
+            <input type="hidden" name="codefield" id="codefield" value="">
+            {% for error in form.codefield.errors %}
                 <p class="text-danger">{{ error }}</p>
             {% endfor %}
         </div>
@@ -39,7 +39,7 @@
             return code
         }
         editor.session.on('change', function(delta) {
-            $("#textfield").val(getcode());
+            $("#codefield").val(getcode());
         });
         $('#input-tags').selectize({
             delimiter: ',',

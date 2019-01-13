@@ -21,7 +21,7 @@
     <div class="form-group">
         <input id="input-tags" name="tags">
     </div>
-    <input type="hidden" name="textfield" id="textfield" value="{{ code.code }}">
+    <input type="hidden" name="codefield" id="codefield" value="{{ code.code }}">
     <input class="btn btn-primary" type="submit" value="Изменить">
 </form>
 <script>
@@ -35,7 +35,7 @@
         return code
     }
     editor.session.on('change', function(delta) {
-        $("#textfield").val(getcode());
+        $("#codefield").val(getcode());
     });
     $('#input-tags').selectize({
         delimiter: ',',

@@ -53,7 +53,7 @@ class CreateView(View):
         form = forms.CodeForm(request.POST)
 
         if form.is_valid():
-            code = request.POST['textfield']
+            code = request.POST['codefield']
             tags = request.POST['tags']
             topic = request.POST['topic']
             list_tags = tags.split(',')
@@ -110,7 +110,7 @@ class EditView(View):
             obj.delete()
 
         if request.user == code.user:
-            code.code = request.POST['textfield']
+            code.code = request.POST['codefield']
             code.topic = request.POST['topic']
             code.date_last_change = timezone.now()
 

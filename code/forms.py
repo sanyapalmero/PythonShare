@@ -2,13 +2,13 @@ from django import forms
 
 
 class CodeForm(forms.Form):
-    textfield = forms.CharField()
+    codefield = forms.CharField()
     topic = forms.CharField()
 
     def clean(self):
         cleaned_data = super().clean()
         topic = self.data.get('topic')
-        textfield = self.data.get('textfield')
+        codefield = self.data.get('codefield')
         return cleaned_data
 
 

@@ -10,11 +10,11 @@
 </div>
 <div>
     <p style="display: inline-block;">Найдено совпадений: </p>
-    <p style="display: inline-block; font-weight: bold;">{{ texts.count }}</p>
+    <p style="display: inline-block; font-weight: bold;">{{ codes.count }}</p>
 </div>
 <div>
-    {% for code in texts %}
-        <p style="display: inline-block;">Тема: {{ code.text.topic }} |</p>
+    {% for code in codes %}
+        <p style="display: inline-block;">Тема: {{ code.code.topic }} |</p>
         <a style="display: inline-block;"href="{% url 'code:detail' code.code.id %}">Перейти</a><br>
     {% endfor %}
 </div>
