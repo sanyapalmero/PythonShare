@@ -15,10 +15,9 @@ from .models import Code, Tag, Comment
 
 logger = logging.getLogger(__name__)
 
-ENTRIES_COUNT = 20 # Количество строк в таблице
 
-# Метод get_client_ip возвращает ip адрес пользователя
 def get_client_ip(request):
+    """Возвращает IP-адрес клиента"""
     x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
     if x_forwarded_for:
         ip = x_forwarded_for.split(',')[0]
@@ -26,29 +25,27 @@ def get_client_ip(request):
         ip = request.META.get('REMOTE_ADDR')
     return ip
 
-# Метод add_log_entry добавляет строку об ошибке в файл error.log
 def add_log_entry(request, user, message):
+    """Добавляет строку ошибки в файл error.log"""
     ip = get_client_ip(request)
     logger.error(f"| User: {user} | IP:{ip} | Message: {message}")
 
 
-# Класс Index, содержащий get метод, который возвращает страницу index.html
 class IndexView(View):
+    """Главная страница"""
     def get(self, request):
         template_name = 'code/index.html'
         return render(request, template_name)
 
 
-# Класс Сreate
 @method_decorator(login_required, name='dispatch')
 class CreateView(View):
-    # метод get, возвращающий страницу create.html
+    """Страница добавления нового кода"""
     def get(self, request):
         template_name = 'code/create.html'
         form = CodeForm()
         return render(request, template_name, {'form': form})
 
-    # метод post, отвечающий за добавление кода
     def post(self, request):
         template_name = 'code/create.html'
         form = CodeForm(request.POST)
@@ -70,9 +67,8 @@ class CreateView(View):
             return render(request, template_name, {'form': form})
 
 
-# Класс Detail
 class DetailView(View):
-    # метод get, возвращающий страницу просмотра кода
+    """Страница просмотра кода"""
     def get(self, request, code_id):
         template_name = 'code/detail.html'
         code = get_object_or_404(Code, id=code_id)
@@ -90,10 +86,9 @@ class DetailView(View):
             'url': return_url
             })
 
-# Класс Edit
 @method_decorator(login_required, name='dispatch')
 class EditView(View):
-    # метод get, возвращающий страницу изменения кода
+    """Страница редактирования кода"""
     def get(self, request, code_id):
         template_name = 'code/edit.html'
         code = get_object_or_404(Code, id=code_id)
@@ -107,7 +102,6 @@ class EditView(View):
             add_log_entry(request, request.user, f"GET Попытка изменения кода с id={code.id}")
             return HttpResponseForbidden()
 
-    # метод post, отвечаеющий за обновление данных модели Сode
     def post(self, request, code_id):
         template_name = 'code/edit.html'
         code = get_object_or_404(Code, id=code_id)
@@ -135,12 +129,11 @@ class EditView(View):
             return HttpResponseForbidden()
 
 
-# Класс Delete
 @method_decorator(login_required, name='dispatch')
 class DeleteView(TemplateView):
+    """Страница удаления кода"""
     template_name = 'code/delete.html'
 
-    # метод get_context_data получает объект code и url, с которого пришел пользователь и возвращает словарь
     def get_context_data(self, code_id):
         code = get_object_or_404(Code, id=code_id)
         return_url = self.request.GET.get('next')
@@ -150,7 +143,6 @@ class DeleteView(TemplateView):
 
         return {'code': code, 'url': return_url}
 
-    # метод post, отвечаеющий за удаление кода
     def post(self, request, code_id):
         code = get_object_or_404(Code, id=code_id)
 
@@ -167,20 +159,20 @@ class DeleteView(TemplateView):
             return HttpResponseForbidden()
 
 
-# Класс SearchByTag
 @method_decorator(login_required, name='dispatch')
 class SearchByTagView(TemplateView):
+    """Страница поиска кода по тегам"""
     template_name = 'code/tagsearch.html'
 
-    # метод get_context_data вовзращает словарь для шаблона tagsearch.html
     def get_context_data(self, tag):
         codes = Tag.objects.filter(tag = tag)
         return {'codes': codes, 'tag': tag}
 
-#####################################
-# Классы для работы с комментариями #
-#####################################
+
 class AllCodeView(View):
+    """Страница просмотра всех кодов"""
+    ENTRIES_COUNT = 20 # Количество строк в таблице
+
     def get(self, request):
         template_name = 'code/allcode.html'
         all_code_models = Code.objects.all()
@@ -191,6 +183,7 @@ class AllCodeView(View):
 
 
 class CreateCommentView(View):
+    """Добавление комменатрия"""
     def post(self, request, code_id):
         template_name = 'code/detail.html'
         code_model = get_object_or_404(Code, id=code_id)
@@ -219,6 +212,7 @@ class CreateCommentView(View):
                 })
 
 class UpdateCommentView(View):
+    """Обновление комментария"""
     def post(self, request, comment_id, code_id):
         comment_model = get_object_or_404(Comment, id=comment_id)
         if request.user == comm.user:
@@ -230,6 +224,7 @@ class UpdateCommentView(View):
             return HttpResponseForbidden()
 
 class DeleteCommentView(View):
+    """Удаление комментария"""
     def post(self, request, comment_id, code_id):
         comment_model = get_object_or_404(Comment, id=comment_id)
         if request.user == comm.user:
