@@ -54,18 +54,18 @@ class CreateView(View):
         form = CodeForm(request.POST)
 
         if form.is_valid():
-            code = request.POST['codefield']
-            tags = request.POST['tags']
-            topic = request.POST['topic']
+            code = form.cleaned_data['codefield']
+            tags = form.cleaned_data['tags']
+            topic = form.cleaned_data['topic']
             list_tags = tags.split(',')
-            code_obj = Code(code=code, user=request.user, topic=topic)
-            code_obj.save()
+            code_model = Code(code=code, user=request.user, topic=topic)
+            code_model.save()
 
             for tag in list_tags:
-                tag_obj = Tag(tag = tag, code=code_obj)
-                tag_obj.save()
+                tag_model = Tag(tag = tag, code=code_model)
+                tag_model.save()
 
-            return redirect('code:detail', code_id=code_obj.id)
+            return redirect('code:detail', code_id=code_model.id)
         else:
             return render(request, template_name, {'form': form})
 
@@ -105,29 +105,23 @@ class EditView(View):
     def post(self, request, code_id):
         template_name = 'code/edit.html'
         code = get_object_or_404(Code, id=code_id)
-        tags_obj = Tag.objects.filter(code=code_id)
+        tags = Tag.objects.filter(code=code_id)
 
-        for obj in tags_obj: # удаление всех тегов, привязанных к коду
-            obj.delete()
+        for tag in tags: # удаление всех тегов, привязанных к коду
+            tag.delete()
 
         if request.user == code.user:
             code.code = request.POST['codefield']
             code.topic = request.POST['topic']
             code.date_last_change = timezone.now()
+            code.save()
 
-            try:
-                code.save()
-            except DataError:
-                error = 'Превышен лимит количества символов!'
-                add_log_entry(request, request.user, "Превышен лимит количества символов")
-                return render(request, template_name, {'text': code,'error':error})
-
-            tags = request.POST['tags']
-            list_tags = tags.split(',')
+            new_tags = request.POST['tags']
+            list_tags = new_tags.split(',')
 
             for tag in list_tags: # сохранение новых тегов
-                tag_obj = Tag(tag = tag, code=code)
-                tag_obj.save()
+                tag_model = Tag(tag=tag, code=code)
+                tag_model.save()
 
             return redirect('code:detail', code_id=code.id)
         else:
@@ -183,8 +177,8 @@ class SearchByTagView(TemplateView):
 class AllCodeView(View):
     def get(self, request):
         template_name = 'code/allcode.html'
-        all_codes = Code.objects.all()
-        paginator = Paginator(all_codes, ENTRIES_COUNT)
+        all_code_models = Code.objects.all()
+        paginator = Paginator(all_code_models, ENTRIES_COUNT)
         page = request.GET.get('page')
         codes = paginator.get_page(page)
         return render(request, template_name, {'codes': codes})
@@ -193,20 +187,20 @@ class AllCodeView(View):
 class CreateCommentView(View):
     def post(self, request, code_id):
         template_name = 'code/detail.html'
-        code_obj = get_object_or_404(Code, id=code_id)
+        code_model = get_object_or_404(Code, id=code_id)
         form = AddCommentForm(request.POST)
 
         if form.is_valid():
-            comment = request.POST['comment']
-            reply_to_id = request.POST['reply_to']
-            comm_obj = Comment(commentary=comment, user=request.user, code=code_obj)
+            comment = form.cleaned_data['comment']
+            reply_to_id = form.changed_data['reply_to']
+            comment_model = Comment(commentary=comment, user=request.user, code=code_model)
 
             if reply_to_id:
                 reply_comment = get_object_or_404(Comment, id=reply_to_id)
-                comm_obj.reply_to = reply_comment
+                comment_model.reply_to = reply_comment
 
-            comm_obj.save()
-            return redirect('code:detail', code_id=code_obj.id)
+            comment_model.save()
+            return redirect('code:detail', code_id=code_model.id)
         else:
             code = get_object_or_404(Code, id=code_id)
             tags = Tag.objects.filter(code = code)
@@ -220,21 +214,21 @@ class CreateCommentView(View):
 
 class UpdateCommentView(View):
     def post(self, request, comment_id, code_id):
-        comm = get_object_or_404(Comment, id=comment_id)
+        comment_model = get_object_or_404(Comment, id=comment_id)
         if request.user == comm.user:
-            comm.comment = request.POST['comment']
-            comm.save()
+            comment_model.comment = request.POST['comment']
+            comment_model.save()
             return redirect('code:detail', code_id=code_id)
         else:
-            add_log_entry(request, request.user, f"POST Попытка изменения комментария с id={comm.id}")
+            add_log_entry(request, request.user, f"POST Попытка изменения комментария с id={comment_model.id}")
             return HttpResponseForbidden()
 
 class DeleteCommentView(View):
     def post(self, request, comment_id, code_id):
-        comm = get_object_or_404(Comment, id=comment_id)
+        comment_model = get_object_or_404(Comment, id=comment_id)
         if request.user == comm.user:
-            comm.delete()
+            comment_model.delete()
             return redirect('code:detail', code_id=code_id)
         else:
-            add_log_entry(request, request.user, f"POST Попытка удаления комментария с id={comm.id}")
+            add_log_entry(request, request.user, f"POST Попытка удаления комментария с id={comment_model.id}")
             return HttpResponseForbidden()
