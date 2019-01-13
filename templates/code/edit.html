@@ -7,21 +7,21 @@
 {% if error %}
 <p style="color:red">{{ error }}</p>
 {% endif %}
-<input id="code" type="hidden" value="{{ text.code }}">
-<form action="{% url 'code:edit' text.id %}" method="post">
+<input id="code" type="hidden" value="{{ code.code }}">
+<form action="{% url 'code:edit' code.id %}" method="post">
     {% csrf_token %}
     <label>Тема</label>
     <div class="form-group">
-        <input class="form-control" type="text" name="topic" value="{{ text.topic }}" required>
+        <input class="form-control" type="text" name="topic" value="{{ code.topic }}" required>
     </div>
-    <label for="text">Изменить код:</label>
+    <label>Изменить код:</label>
     <pre id="editor"></pre>
     <div class="ace-editor editor-control"></div>
     <label>Теги</label>
     <div class="form-group">
         <input id="input-tags" name="tags">
     </div>
-    <input type="hidden" name="textfield" id="textfield" value="{{ text.text }}">
+    <input type="hidden" name="textfield" id="textfield" value="{{ code.code }}">
     <input class="btn btn-primary" type="submit" value="Изменить">
 </form>
 <script>

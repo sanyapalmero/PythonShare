@@ -3,13 +3,13 @@
 {% block title %} Code Delete {% endblock %}
 
 {% block content %}
-<label for="text">Вы действительно хотите удалить код?</label><br>
+<label>Вы действительно хотите удалить код?</label><br>
 <p style="font-weight:bold; display:inline-block">Тема: </p>
-<p style="display:inline-block">{{ text.topic }}</p>
-<form action="{% url 'code:delete' text.id %}" method="post">
+<p style="display:inline-block">{{ code.topic }}</p>
+<form action="{% url 'code:delete' code.id %}" method="post">
     {% csrf_token %}
     <input class="btn btn-danger" type="submit" value="Удалить">
-    <a style="display:inline-block" href="{% url 'code:detail' text.id %}">Вернуться назад</a>
+    <a style="display:inline-block" href="{% url 'code:detail' code.id %}">Вернуться назад</a>
     <input type="hidden" name="next" value="{{ url }}">
 </form>
 {% endblock %}

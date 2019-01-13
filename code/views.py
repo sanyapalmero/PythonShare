@@ -78,7 +78,7 @@ class DetailView(View):
         tags = models.Tag.objects.filter(code = code)
         comments = models.Comment.objects.filter(code = code)
         return render(request, template_name, {
-            'text': code,
+            'code': code,
             'tags': tags,
             'comments': comments
             })
@@ -93,7 +93,7 @@ class EditView(View):
         if request.user == code.user:
             form = forms.CodeForm()
             return render(request, template_name, {
-                'text': code,
+                'code': code,
                 'form': form
             })
         else:
@@ -147,7 +147,7 @@ class DeleteView(TemplateView):
         if return_url == None:
             return_url = "/"
 
-        return {'text': code, 'url': return_url} # TODO: return_url сейчас не работает
+        return {'code': code, 'url': return_url} # TODO: return_url сейчас не работает
 
     # метод post, отвечаеющий за удаление кода
     def post(self, request, code_id):
@@ -174,7 +174,7 @@ class SearchByTagView(TemplateView):
     # метод get_context_data вовзращает словарь для шаблона tagsearch.html
     def get_context_data(self, tag):
         codes = models.Tag.objects.filter(tag = tag)
-        return {'texts': codes, 'tag': tag}
+        return {'codes': codes, 'tag': tag}
 
 #####################################
 # Классы для работы с комментариями #
@@ -211,7 +211,7 @@ class CreateCommentView(View):
             tags = models.Tag.objects.filter(code = code)
             comments = models.Comment.objects.filter(code = code)
             return render(request, template_name, {
-                'text': code,
+                'code': code,
                 'tags': tags,
                 'comments': comments,
                 'form':form
