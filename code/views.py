@@ -10,7 +10,8 @@ from django.utils.decorators import method_decorator
 from django.views import View
 from django.views.generic import TemplateView
 
-from . import forms, models
+from .forms import AddCommentForm, CodeForm
+from .models import Code, Tag, Comment
 
 logger = logging.getLogger(__name__)
 
@@ -44,24 +45,24 @@ class CreateView(View):
     # метод get, возвращающий страницу create.html
     def get(self, request):
         template_name = 'code/create.html'
-        form = forms.CodeForm()
+        form = CodeForm()
         return render(request, template_name, {'form': form})
 
     # метод post, отвечающий за добавление кода
     def post(self, request):
         template_name = 'code/create.html'
-        form = forms.CodeForm(request.POST)
+        form = CodeForm(request.POST)
 
         if form.is_valid():
             code = request.POST['codefield']
             tags = request.POST['tags']
             topic = request.POST['topic']
             list_tags = tags.split(',')
-            code_obj = models.Code(code=code, user=request.user, topic=topic)
+            code_obj = Code(code=code, user=request.user, topic=topic)
             code_obj.save()
 
             for tag in list_tags:
-                tag_obj = models.Tag(tag = tag, code=code_obj)
+                tag_obj = Tag(tag = tag, code=code_obj)
                 tag_obj.save()
 
             return redirect('code:detail', code_id=code_obj.id)
@@ -74,9 +75,9 @@ class DetailView(View):
     # метод get, возвращающий страницу просмотра кода
     def get(self, request, code_id):
         template_name = 'code/detail.html'
-        code = get_object_or_404(models.Code, id=code_id)
-        tags = models.Tag.objects.filter(code = code)
-        comments = models.Comment.objects.filter(code = code)
+        code = get_object_or_404(Code, id=code_id)
+        tags = Tag.objects.filter(code = code)
+        comments = Comment.objects.filter(code = code)
         return render(request, template_name, {
             'code': code,
             'tags': tags,
@@ -89,9 +90,9 @@ class EditView(View):
     # метод get, возвращающий страницу изменения кода
     def get(self, request, code_id):
         template_name = 'code/edit.html'
-        code = get_object_or_404(models.Code, id=code_id)
+        code = get_object_or_404(Code, id=code_id)
         if request.user == code.user:
-            form = forms.CodeForm()
+            form = CodeForm()
             return render(request, template_name, {
                 'code': code,
                 'form': form
@@ -103,8 +104,8 @@ class EditView(View):
     # метод post, отвечаеющий за обновление данных модели Сode
     def post(self, request, code_id):
         template_name = 'code/edit.html'
-        code = get_object_or_404(models.Code, id=code_id)
-        tags_obj = models.Tag.objects.filter(code=code_id)
+        code = get_object_or_404(Code, id=code_id)
+        tags_obj = Tag.objects.filter(code=code_id)
 
         for obj in tags_obj: # удаление всех тегов, привязанных к коду
             obj.delete()
@@ -125,7 +126,7 @@ class EditView(View):
             list_tags = tags.split(',')
 
             for tag in list_tags: # сохранение новых тегов
-                tag_obj = models.Tag(tag = tag, code=code)
+                tag_obj = Tag(tag = tag, code=code)
                 tag_obj.save()
 
             return redirect('code:detail', code_id=code.id)
@@ -141,7 +142,7 @@ class DeleteView(TemplateView):
 
     # метод get_context_data получает объект code и url, с которого пришел пользователь и возвращает словарь
     def get_context_data(self, code_id):
-        code = get_object_or_404(models.Code, id=code_id)
+        code = get_object_or_404(Code, id=code_id)
         return_url = self.request.GET.get('next')
 
         if return_url == None:
@@ -151,7 +152,7 @@ class DeleteView(TemplateView):
 
     # метод post, отвечаеющий за удаление кода
     def post(self, request, code_id):
-        code = get_object_or_404(models.Code, id=code_id)
+        code = get_object_or_404(Code, id=code_id)
 
         if request.user == code.user:
             return_url = request.POST['next']
@@ -173,7 +174,7 @@ class SearchByTagView(TemplateView):
 
     # метод get_context_data вовзращает словарь для шаблона tagsearch.html
     def get_context_data(self, tag):
-        codes = models.Tag.objects.filter(tag = tag)
+        codes = Tag.objects.filter(tag = tag)
         return {'codes': codes, 'tag': tag}
 
 #####################################
@@ -182,7 +183,7 @@ class SearchByTagView(TemplateView):
 class AllCodeView(View):
     def get(self, request):
         template_name = 'code/allcode.html'
-        all_codes = models.Code.objects.all()
+        all_codes = Code.objects.all()
         paginator = Paginator(all_codes, ENTRIES_COUNT)
         page = request.GET.get('page')
         codes = paginator.get_page(page)
@@ -192,24 +193,24 @@ class AllCodeView(View):
 class CreateCommentView(View):
     def post(self, request, code_id):
         template_name = 'code/detail.html'
-        code_obj = get_object_or_404(models.Code, id=code_id)
-        form = forms.AddCommentForm(request.POST)
+        code_obj = get_object_or_404(Code, id=code_id)
+        form = AddCommentForm(request.POST)
 
         if form.is_valid():
             comment = request.POST['comment']
             reply_to_id = request.POST['reply_to']
-            comm_obj = models.Comment(commentary=comment, user=request.user, code=code_obj)
+            comm_obj = Comment(commentary=comment, user=request.user, code=code_obj)
 
             if reply_to_id:
-                reply_comment = get_object_or_404(models.Comment, id=reply_to_id)
+                reply_comment = get_object_or_404(Comment, id=reply_to_id)
                 comm_obj.reply_to = reply_comment
 
             comm_obj.save()
             return redirect('code:detail', code_id=code_obj.id)
         else:
-            code = get_object_or_404(models.Code, id=code_id)
-            tags = models.Tag.objects.filter(code = code)
-            comments = models.Comment.objects.filter(code = code)
+            code = get_object_or_404(Code, id=code_id)
+            tags = Tag.objects.filter(code = code)
+            comments = Comment.objects.filter(code = code)
             return render(request, template_name, {
                 'code': code,
                 'tags': tags,
@@ -219,7 +220,7 @@ class CreateCommentView(View):
 
 class UpdateCommentView(View):
     def post(self, request, comment_id, code_id):
-        comm = get_object_or_404(models.Comment, id=comment_id)
+        comm = get_object_or_404(Comment, id=comment_id)
         if request.user == comm.user:
             comm.comment = request.POST['comment']
             comm.save()
@@ -230,7 +231,7 @@ class UpdateCommentView(View):
 
 class DeleteCommentView(View):
     def post(self, request, comment_id, code_id):
-        comm = get_object_or_404(models.Comment, id=comment_id)
+        comm = get_object_or_404(Comment, id=comment_id)
         if request.user == comm.user:
             comm.delete()
             return redirect('code:detail', code_id=code_id)

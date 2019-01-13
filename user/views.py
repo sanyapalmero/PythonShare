@@ -9,7 +9,8 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.utils.decorators import method_decorator
 from django.views import View
 
-from . import forms, models
+from .forms import CreateUserForm
+from .models import User
 
 ENTRIES_COUNT = 10
 
@@ -17,14 +18,14 @@ ENTRIES_COUNT = 10
 class CreateView(View):
     def get(self, request):
         template_name = 'user/register.html'
-        form = forms.CreateUserForm()
+        form = CreateUserForm()
         return render(request, template_name, {'form': form})
 
     def post(self, request):
         template_name_login = 'user/login.html'
         template_name_register = 'user/register.html'
 
-        form = forms.CreateUserForm(request.POST)
+        form = CreateUserForm(request.POST)
 
         if form.is_valid():
             username = form.cleaned_data['username']
@@ -32,7 +33,7 @@ class CreateView(View):
             repeat_password = form.cleaned_data['repeat_password']
             avatar = request.FILES.get('avatar')
 
-            user = models.User.objects.create_user(username, password, avatar)
+            user = User.objects.create_user(username, password, avatar)
             good = 'Вы успешно зарегистрированы!'
             return render(request, template_name_login, {'good': good})
         else:
@@ -92,7 +93,7 @@ class ProfileSettingsView(View):
 class UpdateAvatarView(View):
     def post(self, request):
         template_name = 'user/settings.html'
-        user = get_object_or_404(models.User, username=request.user)
+        user = get_object_or_404(User, username=request.user)
         avatar = request.FILES.get('avatar')
 
         if not avatar:
@@ -110,7 +111,7 @@ class UpdatePasswordView(View):
         template_name_login = 'user/login.html'
         template_name_settings = 'user/settings.html'
 
-        user = get_object_or_404(models.User, username=request.user)
+        user = get_object_or_404(User, username=request.user)
         old_password = request.POST['old_password']
         new_password = request.POST['new_password']
 
