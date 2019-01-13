@@ -63,25 +63,6 @@
         </form>
         {% endif %}
     </div>
-    <style>
-        .comment {border-radius: 10px; border: 1px solid #228f9a; overflow: hidden; padding: 5px}
-        .avatar, .name-comment {float: left;}
-        .avatar {width: 6%;}
-        .avatar img {width:60px; height:60px; border-radius: 60px; border: 2px solid #228f9a;}
-        .name-comment {width: 55%;}
-        .date, .buttons {width: 20%; float: right;}
-        .comm {margin-top: 15px;}
-        .buttons a{float: right; margin-right: 30px; margin-top: 20px;}
-        @media only screen and (max-width:768px){
-            .comment .name-comment{
-                margin-left: 50px;
-            }
-            .buttons{
-                display: block;
-                width: 200px;
-            }
-        }
-    </style>
     <div class="all-comments form-group">
         {% for comment in comments %}
         <div class="comment form-group" id="com{{comment.id}}">
