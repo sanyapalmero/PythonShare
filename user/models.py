@@ -41,7 +41,7 @@ class User(AbstractBaseUser):
     @property
     def avatar_or_default_url(self):
         if not self.avatar:
-            default_url = "/static/default.png"
+            default_url = "/static/img/default.png"
             return default_url
         else:
             return self.avatar.url
