@@ -191,7 +191,7 @@ class CreateCommentView(View):
 
         if form.is_valid():
             comment = form.cleaned_data['comment']
-            reply_to_id = form.changed_data['reply_to']
+            reply_to_id = request.POST['reply_to']
             comment_model = Comment(commentary=comment, user=request.user, code=code_model)
 
             if reply_to_id:
