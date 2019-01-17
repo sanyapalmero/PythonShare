@@ -80,7 +80,7 @@ class ProfileView(View):
     def get(self, request):
         template_name = 'user/profile.html'
         user_codes = Code.objects.filter(user=request.user)
-        paginator = Paginator(user_codes, ENTRIES_COUNT)
+        paginator = Paginator(user_codes, self.ENTRIES_COUNT)
         page = request.GET.get('page')
         codes = paginator.get_page(page)
         return render(request, template_name, {

@@ -176,7 +176,7 @@ class AllCodeView(View):
     def get(self, request):
         template_name = 'code/allcode.html'
         all_code_models = Code.objects.all()
-        paginator = Paginator(all_code_models, ENTRIES_COUNT)
+        paginator = Paginator(all_code_models, self.ENTRIES_COUNT)
         page = request.GET.get('page')
         codes = paginator.get_page(page)
         return render(request, template_name, {'codes': codes})
