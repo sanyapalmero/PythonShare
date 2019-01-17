@@ -1,5 +1,5 @@
-from code.models import Code
-from code.views import add_log_entry
+from code_app.models import Code
+from code_app.views import add_log_entry
 
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required

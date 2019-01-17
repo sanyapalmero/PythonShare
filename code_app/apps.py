@@ -2,4 +2,4 @@ from django.apps import AppConfig
 
 
 class CodeConfig(AppConfig):
-    name = 'code'
+    name = 'code_app'
