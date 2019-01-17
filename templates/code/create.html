@@ -31,25 +31,4 @@
             <p class="text-danger">Авторизуйтесь, чтобы добавлять тексты</p>
         {% endif %}
     </form>
-    <script>
-        var editor = ace.edit("editor");
-        editor.session.setMode("ace/mode/python");
-        function getcode(){
-            code = editor.getValue();
-            return code
-        }
-        editor.session.on('change', function(delta) {
-            $("#codefield").val(getcode());
-        });
-        $('#input-tags').selectize({
-            delimiter: ',',
-            persist: false,
-            create: function(input) {
-                return {
-                    value: input,
-                    text: input
-                }
-            }
-        });
-    </script>
 {% endblock %}
